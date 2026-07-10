@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#6366f1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Messagerie BHDS">
+<meta name="description" content="Messagerie entre professeur et élèves — Club Réussir Ensemble">
+<link rel="manifest" href="chat-manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Club Réussir Ensemble</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
+.hidden{display:none!important}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;background:#f0f4f8}
+
+/* ── HEADER ── */
+.hdr{background:#1a1f2e;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hdr-avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.hdr-info{flex:1;min-width:0}
+.hdr-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-sub{font-size:11px;color:#94a3b8;margin-top:1px}
+.hdr-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:9px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-btn:active{background:rgba(255,255,255,.2)}
+
+/* ── LANDING ── */
+#landing{background:#0d1220;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+#landing::before{content:'';position:absolute;top:50%;left:50%;width:340px;height:340px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(212,169,74,.10),transparent 70%);pointer-events:none}
+.seal-frame{position:relative;width:100%;max-width:310px;text-align:center;padding:38px 26px 32px;border:1px solid rgba(212,169,74,.3);border-radius:22px;background:linear-gradient(180deg,rgba(212,169,74,.07),rgba(212,169,74,0) 45%)}
+.seal-eyebrow{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:3.5px;text-transform:uppercase;color:#d4a94a;opacity:.85;margin-bottom:22px}
+.seal-mark{width:62px;height:62px;border-radius:16px;margin:0 auto 20px;background:linear-gradient(135deg,#e0b95a,#b8892f);display:flex;align-items:center;justify-content:center;font-size:27px;box-shadow:0 10px 26px rgba(212,169,74,.28)}
+.seal-name{font-family:'Fraunces',serif;font-weight:600;font-size:22px;line-height:1.28;color:#f5ecd6;letter-spacing:.2px;cursor:pointer;user-select:none}
+.seal-rule{width:34px;height:1px;background:rgba(212,169,74,.45);margin:16px auto}
+.seal-motto{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:#d4a94a;font-weight:500}
+.seal-desc{font-size:12.5px;color:#8b93a7;line-height:1.65;margin-top:22px;max-width:246px;margin-left:auto;margin-right:auto}
+.seal-desc b{color:#c3c9d6;font-weight:600}
+.seal-desc-sub{font-size:12px;color:#5f6884;line-height:1.6;margin-top:11px;max-width:246px;margin-left:auto;margin-right:auto}
+
+/* ── MESSAGES ── */
+.msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column}
+.day-sep{align-self:center;background:#e2e8f0;color:#64748b;font-size:10.5px;font-weight:700;padding:3px 12px;border-radius:20px;margin:10px 0}
+.msg{max-width:76%;padding:8px 11px;border-radius:15px;margin-bottom:6px;font-size:13.5px;line-height:1.42;word-wrap:break-word}
+.msg.out{background:#6366f1;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.msg.in{background:#fff;color:#1a1f2e;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.msg .time{font-size:10px;opacity:.65;margin-top:3px;text-align:right;display:flex;justify-content:flex-end;align-items:center;gap:3px}
+.msg .ticks{font-size:12px;letter-spacing:-2px;opacity:.8}
+.msg .ticks.read{color:#4fc3f7;opacity:1}
+.msg .sender-name{font-size:11px;font-weight:800;color:#6366f1;margin-bottom:2px}
+.msg.out .sender-name{display:none}
+
+/* ── ONGLETS (privé / groupe) ── */
+.chat-tabs{display:flex;background:#fff;border-bottom:1px solid #e2e8f0;flex-shrink:0}
+.tab-btn{flex:1;background:none;border:none;padding:11px 6px;font-size:12.5px;font-weight:700;color:#94a3b8;cursor:pointer;border-bottom:2.5px solid transparent}
+.tab-btn.active{color:#6366f1;border-bottom-color:#6366f1}
+
+.eleve-item.pinned{background:#eef2ff}
+.eleve-item.pinned .eleve-av{background:linear-gradient(135deg,#1a1f2e,#334155)}
+
+/* ── SONDAGES ── */
+.sondage-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sondage-q{font-family:'Syne',sans-serif;font-weight:800;font-size:13.5px;color:#1a1f2e;margin-bottom:11px;line-height:1.35}
+.sondage-opt{display:block;width:100%;text-align:left;background:#f1f5f9;border:1.5px solid transparent;border-radius:10px;padding:10px 12px;margin-bottom:7px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;color:#1a1f2e}
+.sondage-opt:active{background:#e0e7ff;border-color:#6366f1}
+.sondage-textarea{width:100%;border:1.5px solid #e2e8f0;border-radius:10px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:64px;margin-bottom:8px;outline:none}
+.sondage-textarea:focus{border-color:#6366f1}
+.sondage-done{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:14px;padding:14px;margin-bottom:12px;color:#16a34a;font-size:13px;font-weight:700;display:flex;align-items:center;gap:9px}
+.empty-sondage{margin:auto;text-align:center;color:#94a3b8;font-size:12.5px;padding:30px}
+
+.sondage-item{display:flex;align-items:center;gap:11px;background:#fff;border-radius:13px;padding:11px 12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer}
+.sondage-item:active{background:#f8fafc}
+.sondage-item .si-ico{width:38px;height:38px;border-radius:11px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sondage-item .si-mid{flex:1;min-width:0}
+.sondage-item .si-q{font-size:13px;font-weight:700;color:#1a1f2e;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.sondage-item .si-meta{font-size:11px;color:#94a3b8;margin-top:3px;display:flex;align-items:center;gap:6px}
+.badge-actif{background:#dcfce7;color:#16a34a;font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 6px}
+.badge-ferme{background:#fee2e2;color:#dc2626;font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 6px}
+
+.result-row{margin-bottom:12px}
+.result-row .rr-label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:#334155;margin-bottom:5px}
+.result-bar-bg{background:#f1f5f9;border-radius:20px;height:10px;overflow:hidden}
+.result-bar-fill{background:#6366f1;height:100%;border-radius:20px;transition:width .3s}
+.result-text-item{background:#f8fafc;border-radius:10px;padding:9px 11px;margin-bottom:7px;font-size:12.5px;color:#334155}
+.result-empty{text-align:center;color:#94a3b8;font-size:12.5px;padding:16px}
+.option-row{display:flex;gap:7px;margin-bottom:7px;align-items:center}
+.option-row input{flex:1}
+.option-row button{background:#fef2f2;color:#ef4444;border:none;width:32px;height:32px;border-radius:8px;font-size:14px;cursor:pointer;flex-shrink:0}
+.add-option-btn{background:#eef2ff;color:#4338ca;border:none;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;width:100%;margin-top:2px}
+.type-choice{display:flex;gap:8px;margin-bottom:4px}
+.type-choice button{flex:1;padding:9px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;font-size:12px;font-weight:700;color:#64748b;cursor:pointer}
+.type-choice button.active{border-color:#6366f1;background:#eef2ff;color:#4338ca}
+
+/* ── ACTUALITÉS (vidéos & événements) ── */
+@keyframes pubIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.pub-card{position:relative;background:#fff;border-radius:16px;padding:14px 14px 13px;margin-bottom:14px;box-shadow:0 2px 10px rgba(15,23,42,.07);border:1px solid #eef1f6;overflow:hidden;animation:pubIn .35s ease both}
+.pub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pub-card.type-video::before{background:linear-gradient(90deg,#6366f1,#8b5cf6)}
+.pub-card.type-evenement::before{background:linear-gradient(90deg,#d4a94a,#b8892f)}
+.pub-badge{display:inline-flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;padding:4px 9px;border-radius:20px;margin-bottom:8px}
+.pub-badge.type-video{background:#eef2ff;color:#4338ca}
+.pub-badge.type-evenement{background:#fdf6e6;color:#946f1f}
+.pub-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#1a1f2e;margin-bottom:6px;line-height:1.3}
+.pub-text{font-size:12.5px;color:#334155;line-height:1.55;white-space:pre-wrap}
+.pub-video-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;margin-top:9px;background:#000;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.pub-video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pub-cover-wrap{position:relative;margin-top:9px;border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.pub-cover{width:100%;display:block;cursor:pointer;object-fit:cover;max-height:280px;transition:transform .25s ease}
+.pub-cover:active{transform:scale(.98)}
+.pub-cover-tag{position:absolute;bottom:8px;left:8px;background:rgba(13,18,32,.72);color:#f4d99a;font-size:10px;font-weight:700;letter-spacing:.5px;padding:4px 9px;border-radius:8px;backdrop-filter:blur(2px)}
+.pub-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}
+.pub-gallery .pg-item{position:relative;border-radius:9px;overflow:hidden;aspect-ratio:1;cursor:pointer}
+.pub-gallery img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s ease}
+.pub-gallery .pg-item:active img{transform:scale(1.06)}
+.pub-gallery .pg-more{position:absolute;inset:0;background:rgba(13,18,32,.62);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px}
+.pub-date{font-size:10.5px;color:#94a3b8;margin-top:10px;display:flex;align-items:center;gap:5px}
+.pub-item{display:flex;align-items:center;gap:11px;background:#fff;border-radius:13px;padding:10px 12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.pub-item .pi-ico{width:44px;height:44px;border-radius:11px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden;background-size:cover;background-position:center}
+.pub-item .pi-mid{flex:1;min-width:0;cursor:default}
+.pub-item .pi-title{font-size:13px;font-weight:700;color:#1a1f2e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pub-item .pi-date{font-size:11px;color:#94a3b8;margin-top:2px;display:flex;align-items:center;gap:5px}
+.pub-item .pi-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1px 6px;border-radius:6px}
+.pub-item .pi-tag.type-video{background:#eef2ff;color:#4338ca}
+.pub-item .pi-tag.type-evenement{background:#fdf6e6;color:#946f1f}
+.pub-item .pi-del{background:#fef2f2;color:#ef4444;border:none;width:34px;height:34px;border-radius:9px;font-size:14px;cursor:pointer;flex-shrink:0}
+.empty-pub{margin:auto;text-align:center;color:#94a3b8;font-size:12.5px;padding:30px}
+.empty-pub .ep-ico{font-size:34px;display:block;margin-bottom:10px;opacity:.7}
+.msg img{max-width:100%;border-radius:10px;cursor:pointer;display:block;margin-bottom:4px}
+.file-chip{display:flex;align-items:center;gap:8px;border-radius:10px;padding:8px 9px;margin-bottom:4px;text-decoration:none;color:inherit}
+.msg.out .file-chip{background:rgba(255,255,255,.15)}
+.msg.in .file-chip{background:#f1f5f9}
+.file-chip .fc-ico{font-size:20px;flex-shrink:0}
+.file-chip .fc-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-chip .fc-size{font-size:10px;opacity:.7}
+.empty-chat{margin:auto;text-align:center;color:#94a3b8;font-size:12.5px;padding:20px}
+
+/* ── TOOLBAR ── */
+.toolbar{flex-shrink:0;background:#fff;padding:9px 10px;display:flex;align-items:flex-end;gap:8px;border-top:1px solid #e2e8f0}
+.preview-chip{display:flex;align-items:center;gap:8px;background:#eef2ff;border-radius:10px;padding:6px 8px;margin:0 10px 8px;font-size:12px;color:#4338ca;font-weight:600}
+.preview-chip img{width:34px;height:34px;object-fit:cover;border-radius:6px}
+.preview-chip .pc-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preview-chip .pc-close{background:none;border:none;color:#ef4444;font-size:16px;cursor:pointer;font-weight:800}
+.tb-attach{background:#f1f5f9;border:none;width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.tb-input{flex:1;border:1.5px solid #e2e8f0;border-radius:20px;padding:9px 14px;font-size:13.5px;font-family:'DM Sans',sans-serif;outline:none;resize:none;max-height:90px;line-height:1.35}
+.tb-input:focus{border-color:#6366f1}
+.tb-send{background:#6366f1;border:none;width:38px;height:38px;border-radius:50%;color:#fff;font-size:15px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.tb-send:active{background:#4f52e0}
+.tb-send:disabled{background:#c7d2fe;cursor:default}
+
+/* ── ADMIN LIST ── */
+#adminList .search-wrap{padding:10px 12px;background:#fff;border-bottom:1px solid #e2e8f0}
+#adminList .search-wrap input{width:100%;padding:9px 13px;border:1.5px solid #e2e8f0;border-radius:20px;font-size:13px;outline:none}
+#adminList .search-wrap input:focus{border-color:#6366f1}
+.eleve-list{flex:1;overflow-y:auto;padding:8px 10px}
+.eleve-item{display:flex;align-items:center;gap:11px;background:#fff;border-radius:13px;padding:11px 12px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer}
+.eleve-item:active{background:#f8fafc}
+.eleve-av{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:'Syne',sans-serif;font-size:15px;flex-shrink:0}
+.eleve-mid{flex:1;min-width:0}
+.eleve-name{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;color:#1a1f2e;display:flex;align-items:center;gap:6px}
+.eleve-cls{font-size:10.5px;background:#eef2ff;color:#4338ca;border-radius:5px;padding:1px 6px;font-weight:700}
+.eleve-snip{font-size:12px;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eleve-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.eleve-time{font-size:10px;color:#94a3b8}
+.unread-badge{background:#ef4444;color:#fff;font-size:10px;font-weight:800;border-radius:20px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.empty-list{margin:auto;text-align:center;color:#94a3b8;font-size:12.5px;padding:30px}
+.fab{position:fixed;right:18px;bottom:20px;width:54px;height:54px;border-radius:50%;background:#6366f1;color:#fff;border:none;font-size:24px;box-shadow:0 4px 14px rgba(99,102,241,.45);cursor:pointer;z-index:20}
+.fab:active{background:#4f52e0}
+
+/* ── MODALS ── */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-box{background:#fff;border-radius:18px;padding:20px;max-width:340px;width:100%;max-height:86vh;overflow-y:auto}
+.modal-box h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#1a1f2e;margin-bottom:12px}
+.modal-box label{font-size:11.5px;font-weight:700;color:#64748b;display:block;margin:10px 0 4px}
+.modal-box input{width:100%;padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:13px;outline:none;font-family:'DM Sans',sans-serif}
+.modal-box input:focus{border-color:#6366f1}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.btn{padding:10px 16px;border-radius:11px;border:none;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;flex:1;text-align:center}
+.btn-primary{background:#6366f1;color:#fff}
+.btn-ghost{background:#f1f5f9;color:#475569}
+.btn-green{background:#25d366;color:#fff}
+.link-box{background:#f8fafc;border:1.5px dashed #cbd5e1;border-radius:10px;padding:10px;font-family:'DM Mono',monospace;font-size:11px;color:#334155;word-break:break-all;margin-top:12px}
+.link-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.link-actions .btn{flex:1;min-width:90px;font-size:12px;padding:9px}
+.err-box{background:#fef2f2;color:#dc2626;font-size:12px;border-radius:8px;padding:8px 10px;margin-top:8px;display:none}
+
+/* ── LIGHTBOX ── */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:60;display:flex;align-items:center;justify-content:center;padding:20px}
+#lightbox img{max-width:100%;max-height:100%;border-radius:6px}
+#lightbox .lb-close{position:absolute;top:16px;right:18px;color:#fff;font-size:26px;background:none;border:none;cursor:pointer}
+
+/* ── INSTALL BANNER ── */
+#installBanner{position:fixed;left:12px;right:12px;bottom:12px;background:#1a1f2e;color:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;z-index:40;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+#installBanner span{flex:1;font-size:12.5px}
+#installBanner button{background:#6366f1;color:#fff;border:none;border-radius:9px;padding:8px 12px;font-weight:700;font-size:12px;cursor:pointer}
+#installClose{background:none!important;color:#94a3b8!important;font-size:16px;padding:0 4px!important}
+
+.spin{width:26px;height:26px;border:3px solid #e2e8f0;border-top-color:#6366f1;border-radius:50%;animation:spin .7s linear infinite;margin:auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- LANDING / ADMIN ENTRY -->
+<div id="landing" class="screen">
+  <div class="seal-frame">
+    <div class="seal-eyebrow">Messagerie sécurisée</div>
+    <div class="seal-mark">💬</div>
+    <h1 id="landingTitle" class="seal-name">Club Réussir<br>Ensemble</h1>
+    <div class="seal-rule"></div>
+    <div class="seal-motto">Rigueur · Discipline · Travail</div>
+    <p class="seal-desc">Cette page sert à échanger <b>messages</b>, <b>documents</b> et <b>images</b> entre le professeur et ses élèves.</p>
+    <p class="seal-desc-sub">Élève ? Utilisez le lien personnel envoyé par votre professeur.</p>
+  </div>
+</div>
+
+<!-- STUDENT: INVALID LINK -->
+<div id="studentInvalid" class="screen hidden" style="align-items:center;justify-content:center;text-align:center;padding:24px">
+  <div style="font-size:40px;margin-bottom:10px">⚠️</div>
+  <h1 style="font-family:'Syne',sans-serif;font-size:17px;color:#1a1f2e;margin-bottom:6px">Lien invalide</h1>
+  <p style="font-size:13px;color:#64748b;max-width:260px">Ce lien n'est pas reconnu ou a expiré. Contactez votre professeur pour obtenir un nouveau lien.</p>
+</div>
+
+<!-- STUDENT CHAT -->
+<div id="studentScreen" class="screen hidden">
+  <div class="hdr">
+    <div class="hdr-avatar">👨🏽‍🏫</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Professeur</div>
+      <div class="hdr-sub" id="studentSub">Club Réussir Ensemble</div>
+    </div>
+  </div>
+  <div class="chat-tabs">
+    <button class="tab-btn active" id="tabPrivate" data-tab="private">💬 Le professeur</button>
+    <button class="tab-btn" id="tabGroup" data-tab="group">👥 Groupe classe</button>
+    <button class="tab-btn" id="tabSondages" data-tab="sondages">📊 Sondages</button>
+    <button class="tab-btn" id="tabActus" data-tab="actus">📰 Actualités</button>
+  </div>
+  <div class="msgs" id="studentMsgs"></div>
+  <div class="msgs hidden" id="studentSondagesView"></div>
+  <div class="msgs hidden" id="studentActusView"></div>
+  <div id="studentPreview"></div>
+  <div class="toolbar" id="studentToolbar">
+    <button class="tb-attach" id="studentAttachBtn">📎</button>
+    <textarea class="tb-input" id="studentInput" placeholder="Écrire un message…" rows="1"></textarea>
+    <button class="tb-send" id="studentSendBtn">➤</button>
+  </div>
+</div>
+
+<!-- ADMIN PASSWORD MODAL -->
+<div id="adminPwModal" class="modal-bg hidden">
+  <div class="modal-box">
+    <h2>🔒 Espace professeur</h2>
+    <label>Mot de passe</label>
+    <input type="password" id="adminPwInput" placeholder="••••••••">
+    <div class="err-box" id="adminPwErr">Mot de passe incorrect.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="adminPwCancel">Annuler</button>
+      <button class="btn btn-primary" id="adminPwOk">Entrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN LIST -->
+<div id="adminList" class="screen hidden">
+  <div class="hdr">
+    <div class="hdr-avatar">💬</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Messagerie élèves</div>
+      <div class="hdr-sub">Club Réussir Ensemble</div>
+    </div>
+    <button class="hdr-btn" id="adminActusBtn" title="Actualités">📰</button>
+    <button class="hdr-btn" id="adminSondagesBtn" title="Sondages">📊</button>
+    <button class="hdr-btn" id="adminLogoutBtn" title="Quitter">↩</button>
+  </div>
+  <div class="search-wrap"><input type="text" id="adminSearch" placeholder="🔍 Rechercher un élève…"></div>
+  <div id="groupPinWrap" style="padding:8px 10px 0"></div>
+  <div class="eleve-list" id="eleveList"></div>
+  <button class="fab" id="fabNewEleve">＋</button>
+</div>
+
+<!-- ADMIN CHAT -->
+<div id="adminChat" class="screen hidden">
+  <div class="hdr">
+    <button class="hdr-btn" id="adminBackBtn">←</button>
+    <div class="hdr-avatar" id="adminChatAv">👤</div>
+    <div class="hdr-info">
+      <div class="hdr-title" id="adminChatName">—</div>
+      <div class="hdr-sub" id="adminChatSub">—</div>
+    </div>
+    <button class="hdr-btn" id="adminDeleteBtn" title="Supprimer la conversation">🗑</button>
+  </div>
+  <div class="msgs" id="adminMsgs"></div>
+  <div id="adminPreview"></div>
+  <div class="toolbar">
+    <button class="tb-attach" id="adminAttachBtn">📎</button>
+    <textarea class="tb-input" id="adminInput" placeholder="Écrire un message…" rows="1"></textarea>
+    <button class="tb-send" id="adminSendBtn">➤</button>
+  </div>
+</div>
+
+<!-- NEW ELEVE MODAL -->
+<div id="newEleveModal" class="modal-bg hidden">
+  <div class="modal-box">
+    <h2>👤 Nouvel élève</h2>
+    <div id="neForm">
+      <label>Nom complet *</label>
+      <input type="text" id="neNom" placeholder="Ex : Mamadou Diallo">
+      <label>Classe</label>
+      <input type="text" id="neClasse" placeholder="Ex : Terminale S2">
+      <label>Téléphone WhatsApp (optionnel)</label>
+      <input type="text" id="neTel" placeholder="Ex : 622000000">
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="neCancel">Annuler</button>
+        <button class="btn btn-primary" id="neGenerate">Générer le lien</button>
+      </div>
+    </div>
+    <div id="neResult" class="hidden">
+      <p style="font-size:12.5px;color:#64748b">Lien personnel généré pour <b id="neResultNom"></b> :</p>
+      <div class="link-box" id="neResultLink"></div>
+      <div class="link-actions">
+        <button class="btn btn-ghost" id="neCopy">📋 Copier</button>
+        <button class="btn btn-green" id="neWa">📲 WhatsApp</button>
+        <button class="btn btn-ghost" id="neClose">Terminer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN SONDAGES : LISTE -->
+<div id="adminSondages" class="screen hidden">
+  <div class="hdr">
+    <button class="hdr-btn" id="sondagesBackBtn">←</button>
+    <div class="hdr-avatar">📊</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Sondages des cours</div>
+      <div class="hdr-sub">Résultats visibles par vous seul</div>
+    </div>
+  </div>
+  <div class="eleve-list" id="sondagesList" style="padding-top:12px"></div>
+  <button class="fab" id="fabNewSondage">＋</button>
+</div>
+
+<!-- NEW SONDAGE MODAL -->
+<div id="newSondageModal" class="modal-bg hidden">
+  <div class="modal-box">
+    <h2>📊 Nouveau sondage</h2>
+    <label>Question</label>
+    <input type="text" id="nsQuestion" placeholder="Ex : Comment as-tu trouvé le cours d'aujourd'hui ?">
+    <label>Type de réponse</label>
+    <div class="type-choice">
+      <button type="button" class="active" id="nsTypeChoix" data-type="choix">☑️ Choix multiple</button>
+      <button type="button" id="nsTypeOuverte" data-type="ouverte">✏️ Réponse libre</button>
+    </div>
+    <div id="nsOptionsWrap">
+      <label>Options de réponse</label>
+      <div id="nsOptions"></div>
+      <button type="button" class="add-option-btn" id="nsAddOption">＋ Ajouter une option</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="nsCancel">Annuler</button>
+      <button class="btn btn-primary" id="nsCreate">Créer le sondage</button>
+    </div>
+  </div>
+</div>
+
+<!-- SONDAGE RESULTS MODAL -->
+<div id="sondageResultsModal" class="modal-bg hidden">
+  <div class="modal-box" style="max-width:380px">
+    <h2 id="srQuestion">—</h2>
+    <div id="srMeta" style="font-size:11.5px;color:#94a3b8;margin-bottom:14px">—</div>
+    <div id="srContent"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="srToggleActif">—</button>
+      <button class="btn" style="background:#fef2f2;color:#dc2626" id="srDelete">🗑 Supprimer</button>
+    </div>
+    <button class="btn btn-ghost" id="srClose" style="width:100%;margin-top:8px">Fermer</button>
+  </div>
+</div>
+
+<!-- ADMIN ACTUS : LISTE -->
+<div id="adminActus" class="screen hidden">
+  <div class="hdr">
+    <button class="hdr-btn" id="actusBackBtn">←</button>
+    <div class="hdr-avatar">📰</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Actualités</div>
+      <div class="hdr-sub">Vidéos et événements de la classe</div>
+    </div>
+  </div>
+  <div class="eleve-list" id="actusList" style="padding-top:12px"></div>
+  <button class="fab" id="fabNewActu">＋</button>
+</div>
+
+<!-- NEW ACTU MODAL -->
+<div id="newActuModal" class="modal-bg hidden">
+  <div class="modal-box">
+    <h2>📰 Nouvelle publication</h2>
+    <div class="type-choice">
+      <button type="button" class="active" id="naTypeVideo" data-type="video">🎬 Vidéo YouTube</button>
+      <button type="button" id="naTypeEvent" data-type="evenement">📅 Événement</button>
+    </div>
+    <label>Titre</label>
+    <input type="text" id="naTitre" placeholder="Ex : Rappel — Devoir de physique">
+
+    <div id="naVideoWrap">
+      <label>Lien YouTube</label>
+      <input type="text" id="naYoutube" placeholder="https://www.youtube.com/watch?v=...">
+    </div>
+
+    <label>Texte (optionnel)</label>
+    <input type="text" id="naTexte" placeholder="Description ou message...">
+
+    <div id="naEventWrap" class="hidden">
+      <label>Image de couverture (lien postimage, optionnel)</label>
+      <input type="text" id="naImage" placeholder="https://i.postimg.cc/xxxx/photo.jpg">
+      <label>Galerie photo (liens postimage, optionnel)</label>
+      <div id="naGalerie"></div>
+      <button type="button" class="add-option-btn" id="naAddPhoto">＋ Ajouter une photo</button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="naCancel">Annuler</button>
+      <button class="btn btn-primary" id="naCreate">Publier</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="hidden">
+  <button class="lb-close" id="lbClose">✕</button>
+  <img id="lbImg" src="">
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="installBanner" class="hidden">
+  <span>📲 Installez cette messagerie sur votre téléphone</span>
+  <button id="installBtn">Installer</button>
+  <button id="installClose">✕</button>
+</div>
+
+<input type="file" id="fileInputStudent" class="hidden" accept="image/*,application/pdf">
+<input type="file" id="fileInputAdmin" class="hidden" accept="image/*,application/pdf">
+
+<script type="module">
+// ═══════════════════════════════════════════════════════════════
+// FIREBASE — projet "emploi-temps" (réutilisé)
+// ═══════════════════════════════════════════════════════════════
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+  doc, setDoc, getDoc, deleteDoc, collection, getDocs, onSnapshot,
+  addDoc, query, orderBy, updateDoc, serverTimestamp, increment
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBYeYPOptN2wEak_Ctcr4a8t5qXpj4riLE",
+  authDomain: "emploi-temps.firebaseapp.com",
+  projectId: "emploi-temps",
+  storageBucket: "emploi-temps.firebasestorage.app",
+  messagingSenderId: "665985283894",
+  appId: "1:665985283894:web:b0c4cb14824bb8fed9a597"
+};
+const fbApp = initializeApp(firebaseConfig);
+let db;
+try {
+  db = initializeFirestore(fbApp, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
+} catch (e) {
+  db = getFirestore(fbApp);
+}
+
+const ELEVES_COL = 'chatEleves';
+const GROUP_COL = 'chatGroupe';
+const SONDAGES_COL = 'chatSondages';
+const PUBLICATIONS_COL = 'chatPublications';
+const ADMIN_PASSWORD = 'BHDS123';
+const MAX_B64_LEN = 800000; // ~600 Ko de fichier brut, marge sous la limite Firestore de 1 Mo/document
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITAIRES
+// ═══════════════════════════════════════════════════════════════
+function genToken(){ return 'el_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9); }
+function esc(s){ return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function initials(nom){ return (nom||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+function fmtTime(ts){ const d = ts?.toDate ? ts.toDate() : new Date(); return d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+function fmtDay(ts){ const d = ts?.toDate ? ts.toDate() : new Date(); return d.toLocaleDateString('fr-FR',{weekday:'long', day:'numeric', month:'long'}); }
+function dayKey(ts){ const d = ts?.toDate ? ts.toDate() : new Date(); return d.toDateString(); }
+function fmtRelative(ts){
+  if(!ts?.toDate) return '';
+  const d = ts.toDate(), now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  if(sameDay) return d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'});
+}
+function fmtSize(bytes){ return bytes > 1024*1024 ? (bytes/1024/1024).toFixed(1)+' Mo' : Math.round(bytes/1024)+' Ko'; }
+function baseURL(){ return location.origin + location.pathname; }
+function extractYoutubeId(url){
+  const m = (url||'').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// Compresse une image (canvas) pour rester sous la limite Firestore
+async function fileToDataURL(file){
+  const isImage = file.type.startsWith('image/');
+  if(!isImage){
+    if(file.size > MAX_B64_LEN * 0.73){
+      throw new Error('Ce fichier dépasse environ 600 Ko. Veuillez envoyer un fichier PDF plus léger.');
+    }
+    return await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+  }
+  const dataUrl0 = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = dataUrl0;
+  });
+  let maxW = 1280, quality = 0.75, out = '';
+  for(let attempt = 0; attempt < 5; attempt++){
+    let w = img.width, h = img.height;
+    if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    out = canvas.toDataURL('image/jpeg', quality);
+    if(out.length <= MAX_B64_LEN) break;
+    maxW = Math.round(maxW * 0.75);
+    quality = Math.max(0.4, quality - 0.15);
+  }
+  if(out.length > MAX_B64_LEN) throw new Error('Image trop volumineuse même après compression. Essayez une autre photo.');
+  return out;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ROUTAGE INITIAL
+// ═══════════════════════════════════════════════════════════════
+const params = new URLSearchParams(location.search);
+const eleveToken = params.get('eleve');
+
+if(eleveToken){
+  initStudent(eleveToken);
+} else {
+  showScreen('landing');
+  initAdminEntry();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CÔTÉ ÉLÈVE
+// ═══════════════════════════════════════════════════════════════
+let studentPendingFile = null;
+let studentToken = null, studentNom = '', studentMode = 'private', studentUnsub = null;
+
+async function initStudent(token){
+  const ref = doc(db, ELEVES_COL, token);
+  let snap;
+  try { snap = await getDoc(ref); } catch(e){ snap = null; }
+  if(!snap || !snap.exists()){
+    showScreen('studentInvalid');
+    return;
+  }
+  const data = snap.data();
+  studentToken = token;
+  studentNom = data.nom || 'Élève';
+  document.getElementById('studentSub').textContent = [data.nom, data.classe].filter(Boolean).join(' · ') || 'Club Réussir Ensemble';
+  document.title = 'Messagerie — ' + (data.nom || 'Élève');
+  showScreen('studentScreen');
+
+  const input = document.getElementById('studentInput');
+  const sendBtn = document.getElementById('studentSendBtn');
+  const attachBtn = document.getElementById('studentAttachBtn');
+  const fileInput = document.getElementById('fileInputStudent');
+
+  autoGrow(input);
+  attachBtn.onclick = () => fileInput.click();
+  fileInput.onchange = () => handleFileSelect(fileInput, 'studentPreview', f => studentPendingFile = f);
+  sendBtn.onclick = () => sendChatMessage({
+    mode: studentMode, token, role: 'eleve', nom: studentNom,
+    input, previewId: 'studentPreview',
+    getPending: () => studentPendingFile, setPending: f => studentPendingFile = f, sendBtn
+  });
+  input.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendBtn.click(); }
+  });
+
+  document.getElementById('tabPrivate').onclick = () => switchStudentTab('private');
+  document.getElementById('tabGroup').onclick = () => switchStudentTab('group');
+  document.getElementById('tabSondages').onclick = () => switchStudentTab('sondages');
+  document.getElementById('tabActus').onclick = () => switchStudentTab('actus');
+
+  studentSubscribe();
+}
+
+function switchStudentTab(mode){
+  if(mode === studentMode) return;
+  studentMode = mode;
+  document.getElementById('tabPrivate').classList.toggle('active', mode === 'private');
+  document.getElementById('tabGroup').classList.toggle('active', mode === 'group');
+  document.getElementById('tabSondages').classList.toggle('active', mode === 'sondages');
+  document.getElementById('tabActus').classList.toggle('active', mode === 'actus');
+  studentPendingFile = null;
+  document.getElementById('studentPreview').innerHTML = '';
+  document.getElementById('studentInput').value = '';
+
+  const showChat = mode === 'private' || mode === 'group';
+  document.getElementById('studentMsgs').classList.toggle('hidden', !showChat);
+  document.getElementById('studentToolbar').classList.toggle('hidden', !showChat);
+  document.getElementById('studentSondagesView').classList.toggle('hidden', mode !== 'sondages');
+  document.getElementById('studentActusView').classList.toggle('hidden', mode !== 'actus');
+
+  studentSubscribe();
+}
+
+function studentSubscribe(){
+  if(studentUnsub){ studentUnsub(); studentUnsub = null; }
+  const ref = doc(db, ELEVES_COL, studentToken);
+  if(studentMode === 'private'){
+    updateDoc(ref, { unreadEleve: 0 }).catch(()=>{});
+    const msgsCol = collection(db, ELEVES_COL, studentToken, 'messages');
+    studentUnsub = onSnapshot(query(msgsCol, orderBy('at','asc')), snap => {
+      const list = snap.docs.map(d => ({ ...d.data(), _ref: d.ref }));
+      renderMessages('studentMsgs', list, { mode: 'private', isOut: m => m.from === 'eleve' });
+      updateDoc(ref, { unreadEleve: 0 }).catch(()=>{});
+      markIncomingRead(list, 'eleve');
+    });
+  } else if(studentMode === 'group'){
+    studentUnsub = onSnapshot(query(collection(db, GROUP_COL), orderBy('at','asc')), snap => {
+      const list = snap.docs.map(d => ({ ...d.data(), _ref: d.ref }));
+      renderMessages('studentMsgs', list, { mode: 'group', isOut: m => m.fromToken === studentToken });
+    });
+  } else if(studentMode === 'sondages'){
+    studentUnsub = onSnapshot(query(collection(db, SONDAGES_COL), orderBy('createdAt','desc')), snap => {
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.actif);
+      renderStudentSondages(list);
+    });
+  } else {
+    studentUnsub = onSnapshot(query(collection(db, PUBLICATIONS_COL), orderBy('createdAt','desc')), snap => {
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderStudentActus(list);
+    });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACTUALITÉS — CÔTÉ ÉLÈVE (vidéos YouTube & événements)
+// ═══════════════════════════════════════════════════════════════
+function renderStudentActus(list){
+  const el = document.getElementById('studentActusView');
+  if(!list.length){
+    el.innerHTML = '<div class="empty-pub"><span class="ep-ico">📰</span>Aucune actualité pour le moment.</div>';
+    return;
+  }
+  el.innerHTML = list.map(p => {
+    let body = '';
+    if(p.type === 'video'){
+      const yid = extractYoutubeId(p.youtubeUrl);
+      body = yid
+        ? `<div class="pub-video-wrap"><iframe src="https://www.youtube.com/embed/${yid}" allowfullscreen loading="lazy"></iframe></div>`
+        : '';
+    }
+    if(p.texte) body += `<div class="pub-text">${esc(p.texte)}</div>`;
+    if(p.type === 'evenement'){
+      if(p.imageUrl) body += `<div class="pub-cover-wrap"><img class="pub-cover" src="${esc(p.imageUrl)}" onclick="window.__openLightbox('${p.imageUrl.replace(/'/g, "\\'")}')"><span class="pub-cover-tag">📅 ÉVÉNEMENT</span></div>`;
+      if(p.galerie && p.galerie.length){
+        const MAX = 5;
+        const shown = p.galerie.slice(0, MAX);
+        const extra = p.galerie.length - shown.length;
+        body += `<div class="pub-gallery">${shown.map((g, i) => {
+          const isLast = i === shown.length - 1 && extra > 0;
+          return `<div class="pg-item" onclick="window.__openLightbox('${g.replace(/'/g, "\\'")}')">
+            <img src="${esc(g)}">
+            ${isLast ? `<div class="pg-more">+${extra}</div>` : ''}
+          </div>`;
+        }).join('')}</div>`;
+      }
+    }
+    const badge = p.type === 'video'
+      ? '<span class="pub-badge type-video">🎬 Vidéo</span>'
+      : '<span class="pub-badge type-evenement">📅 Événement</span>';
+    return `<div class="pub-card type-${p.type}">
+      ${badge}
+      <div class="pub-title">${esc(p.titre || '')}</div>
+      ${body}
+      <div class="pub-date">🕒 ${esc(fmtDay(p.createdAt))}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SONDAGES — CÔTÉ ÉLÈVE
+// ═══════════════════════════════════════════════════════════════
+function getAnsweredSondageIds(){
+  try { return JSON.parse(localStorage.getItem('bhdsSondagesRepondus') || '[]'); } catch(e){ return []; }
+}
+function markSondageAnswered(id){
+  const arr = getAnsweredSondageIds();
+  if(!arr.includes(id)){ arr.push(id); localStorage.setItem('bhdsSondagesRepondus', JSON.stringify(arr)); }
+}
+
+function renderStudentSondages(list){
+  const el = document.getElementById('studentSondagesView');
+  if(!list.length){
+    el.innerHTML = '<div class="empty-sondage">Aucun sondage actif pour le moment.</div>';
+    return;
+  }
+  const answered = getAnsweredSondageIds();
+  el.innerHTML = list.map(s => {
+    if(answered.includes(s.id)){
+      return `<div class="sondage-done">✅ Merci, votre réponse à « ${esc(s.question)} » a été enregistrée.</div>`;
+    }
+    if(s.type === 'choix'){
+      return `<div class="sondage-card">
+        <div class="sondage-q">${esc(s.question)}</div>
+        ${(s.options||[]).map(o => `<button class="sondage-opt" data-id="${esc(s.id)}" data-val="${esc(o)}">${esc(o)}</button>`).join('')}
+      </div>`;
+    }
+    return `<div class="sondage-card">
+      <div class="sondage-q">${esc(s.question)}</div>
+      <textarea class="sondage-textarea" id="sondageTxt_${esc(s.id)}" placeholder="Votre réponse…"></textarea>
+      <button class="btn btn-primary" style="width:100%" data-id="${esc(s.id)}" data-open="1">Envoyer</button>
+    </div>`;
+  }).join('');
+
+  el.querySelectorAll('.sondage-opt').forEach(btn => {
+    btn.onclick = () => submitSondageReponse(btn.dataset.id, btn.dataset.val);
+  });
+  el.querySelectorAll('button[data-open]').forEach(btn => {
+    btn.onclick = () => {
+      const ta = document.getElementById('sondageTxt_' + btn.dataset.id);
+      const val = ta.value.trim();
+      if(!val){ alert('Veuillez écrire une réponse.'); return; }
+      submitSondageReponse(btn.dataset.id, val);
+    };
+  });
+}
+
+async function submitSondageReponse(sondageId, valeur){
+  try {
+    await addDoc(collection(db, SONDAGES_COL, sondageId, 'reponses'), { valeur, at: serverTimestamp() });
+    await updateDoc(doc(db, SONDAGES_COL, sondageId), { count: increment(1) });
+    markSondageAnswered(sondageId);
+  } catch(e){
+    alert('Erreur lors de l\'envoi de votre réponse.');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENTRÉE ADMIN (déclenchée par 5 clics sur le titre de la page d'accueil)
+// ═══════════════════════════════════════════════════════════════
+function initAdminEntry(){
+  let clicks = 0, clickTimer = null;
+  document.getElementById('landingTitle').addEventListener('click', () => {
+    clicks++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => clicks = 0, 1800);
+    if(clicks >= 5){
+      clicks = 0;
+      openAdminPasswordModal();
+    }
+  });
+
+  if(sessionStorage.getItem('bhdsChatAdmin') === '1'){
+    startAdminSession();
+  }
+}
+
+function openAdminPasswordModal(){
+  const modal = document.getElementById('adminPwModal');
+  const input = document.getElementById('adminPwInput');
+  const err = document.getElementById('adminPwErr');
+  err.style.display = 'none';
+  input.value = '';
+  modal.classList.remove('hidden');
+  setTimeout(() => input.focus(), 100);
+
+  document.getElementById('adminPwCancel').onclick = () => modal.classList.add('hidden');
+  document.getElementById('adminPwOk').onclick = check;
+  input.onkeydown = e => { if(e.key === 'Enter') check(); };
+
+  function check(){
+    if(input.value === ADMIN_PASSWORD){
+      modal.classList.add('hidden');
+      sessionStorage.setItem('bhdsChatAdmin', '1');
+      startAdminSession();
+    } else {
+      err.style.display = 'block';
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CÔTÉ ADMIN — LISTE DES ÉLÈVES
+// ═══════════════════════════════════════════════════════════════
+let allEleves = [];
+
+function startAdminSession(){
+  showScreen('adminList');
+  document.getElementById('adminLogoutBtn').onclick = () => {
+    sessionStorage.removeItem('bhdsChatAdmin');
+    showScreen('landing');
+  };
+  document.getElementById('adminSearch').oninput = renderEleveList;
+  document.getElementById('fabNewEleve').onclick = openNewEleveModal;
+  document.getElementById('adminSondagesBtn').onclick = openAdminSondages;
+  document.getElementById('adminActusBtn').onclick = openAdminActus;
+
+  document.getElementById('groupPinWrap').innerHTML = `
+    <div class="eleve-item pinned" id="groupPinItem">
+      <div class="eleve-av">👥</div>
+      <div class="eleve-mid">
+        <div class="eleve-name">Groupe classe</div>
+        <div class="eleve-snip">Message visible par tous les élèves</div>
+      </div>
+    </div>`;
+  document.getElementById('groupPinItem').onclick = openAdminGroupChat;
+
+  onSnapshot(query(collection(db, ELEVES_COL), orderBy('lastAt','desc')), snap => {
+    allEleves = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderEleveList();
+  });
+}
+
+function renderEleveList(){
+  const term = (document.getElementById('adminSearch').value || '').toLowerCase().trim();
+  const list = document.getElementById('eleveList');
+  const filtered = allEleves.filter(e => !term || (e.nom||'').toLowerCase().includes(term) || (e.classe||'').toLowerCase().includes(term));
+  if(!filtered.length){
+    list.innerHTML = '<div class="empty-list">Aucun élève pour le moment.<br>Touchez ＋ pour générer un lien.</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(e => `
+    <div class="eleve-item" data-id="${esc(e.id)}">
+      <div class="eleve-av">${esc(initials(e.nom))}</div>
+      <div class="eleve-mid">
+        <div class="eleve-name">${esc(e.nom||'—')} ${e.classe ? `<span class="eleve-cls">${esc(e.classe)}</span>` : ''}</div>
+        <div class="eleve-snip">${esc(e.lastMsg || 'Aucun message')}</div>
+      </div>
+      <div class="eleve-right">
+        <div class="eleve-time">${fmtRelative(e.lastAt)}</div>
+        ${e.unreadAdmin ? `<div class="unread-badge">${e.unreadAdmin > 9 ? '9+' : e.unreadAdmin}</div>` : ''}
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.eleve-item').forEach(el => {
+    el.onclick = () => openAdminChat(el.dataset.id);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CÔTÉ ADMIN — NOUVEL ÉLÈVE / GÉNÉRATION DE LIEN
+// ═══════════════════════════════════════════════════════════════
+function openNewEleveModal(){
+  const modal = document.getElementById('newEleveModal');
+  document.getElementById('neForm').classList.remove('hidden');
+  document.getElementById('neResult').classList.add('hidden');
+  document.getElementById('neNom').value = '';
+  document.getElementById('neClasse').value = '';
+  document.getElementById('neTel').value = '';
+  modal.classList.remove('hidden');
+
+  document.getElementById('neCancel').onclick = () => modal.classList.add('hidden');
+  document.getElementById('neClose').onclick = () => modal.classList.add('hidden');
+  document.getElementById('neGenerate').onclick = async () => {
+    const nom = document.getElementById('neNom').value.trim();
+    if(!nom){ alert('Veuillez saisir le nom de l\'élève.'); return; }
+    const classe = document.getElementById('neClasse').value.trim();
+    const tel = document.getElementById('neTel').value.trim();
+    const token = genToken();
+    try {
+      await setDoc(doc(db, ELEVES_COL, token), {
+        nom, classe, tel,
+        createdAt: serverTimestamp(), lastAt: serverTimestamp(), lastMsg: '',
+        unreadAdmin: 0, unreadEleve: 0
+      });
+    } catch(e) {
+      console.error('Erreur création élève :', e);
+      alert('Erreur : le lien n\'a pas pu être créé.\n' + (e && e.message ? e.message : e));
+      return;
+    }
+    const url = baseURL() + '?eleve=' + token;
+    document.getElementById('neForm').classList.add('hidden');
+    document.getElementById('neResult').classList.remove('hidden');
+    document.getElementById('neResultNom').textContent = nom;
+    document.getElementById('neResultLink').textContent = url;
+    document.getElementById('neCopy').onclick = () => {
+      navigator.clipboard.writeText(url).then(() => alert('Lien copié !'));
+    };
+    document.getElementById('neWa').onclick = () => {
+      const txt = encodeURIComponent(`Bonjour ${nom}, voici votre lien de messagerie avec le professeur :\n${url}`);
+      const phone = tel.replace(/\D/g,'');
+      window.open(phone ? `https://wa.me/${phone}?text=${txt}` : `https://wa.me/?text=${txt}`, '_blank');
+    };
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SONDAGES — CÔTÉ ADMIN
+// ═══════════════════════════════════════════════════════════════
+let allSondages = [];
+let sondagesUnsub = null;
+let sondageResultsUnsub = null;
+let nsOptionCount = 0;
+
+function openAdminSondages(){
+  showScreen('adminSondages');
+  document.getElementById('sondagesBackBtn').onclick = () => {
+    if(sondagesUnsub){ sondagesUnsub(); sondagesUnsub = null; }
+    showScreen('adminList');
+  };
+  document.getElementById('fabNewSondage').onclick = openNewSondageModal;
+
+  if(sondagesUnsub) sondagesUnsub();
+  sondagesUnsub = onSnapshot(query(collection(db, SONDAGES_COL), orderBy('createdAt','desc')), snap => {
+    allSondages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderSondagesList();
+  });
+}
+
+function renderSondagesList(){
+  const el = document.getElementById('sondagesList');
+  if(!allSondages.length){
+    el.innerHTML = '<div class="empty-list">Aucun sondage créé.<br>Touchez ＋ pour en créer un.</div>';
+    return;
+  }
+  el.innerHTML = allSondages.map(s => `
+    <div class="sondage-item" data-id="${esc(s.id)}">
+      <div class="si-ico">${s.type === 'choix' ? '☑️' : '✏️'}</div>
+      <div class="si-mid">
+        <div class="si-q">${esc(s.question)}</div>
+        <div class="si-meta">
+          <span>${s.count || 0} réponse${(s.count||0) > 1 ? 's' : ''}</span>
+          <span class="${s.actif ? 'badge-actif' : 'badge-ferme'}">${s.actif ? 'Actif' : 'Fermé'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('.sondage-item').forEach(item => {
+    item.onclick = () => openSondageResults(item.dataset.id);
+  });
+}
+
+function openNewSondageModal(){
+  const modal = document.getElementById('newSondageModal');
+  document.getElementById('nsQuestion').value = '';
+  nsOptionCount = 0;
+  document.getElementById('nsOptions').innerHTML = '';
+  addNsOption(); addNsOption();
+  setSondageType('choix');
+  modal.classList.remove('hidden');
+
+  document.getElementById('nsTypeChoix').onclick = () => setSondageType('choix');
+  document.getElementById('nsTypeOuverte').onclick = () => setSondageType('ouverte');
+  document.getElementById('nsAddOption').onclick = addNsOption;
+  document.getElementById('nsCancel').onclick = () => modal.classList.add('hidden');
+  document.getElementById('nsCreate').onclick = async () => {
+    const question = document.getElementById('nsQuestion').value.trim();
+    if(!question){ alert('Veuillez saisir une question.'); return; }
+    const type = document.getElementById('nsTypeChoix').classList.contains('active') ? 'choix' : 'ouverte';
+    let options = [];
+    if(type === 'choix'){
+      options = [...document.querySelectorAll('#nsOptions input')].map(i => i.value.trim()).filter(Boolean);
+      if(options.length < 2){ alert('Veuillez saisir au moins 2 options.'); return; }
+    }
+    await addDoc(collection(db, SONDAGES_COL), {
+      question, type, options, actif: true, count: 0, createdAt: serverTimestamp()
+    });
+    modal.classList.add('hidden');
+  };
+}
+
+function setSondageType(type){
+  document.getElementById('nsTypeChoix').classList.toggle('active', type === 'choix');
+  document.getElementById('nsTypeOuverte').classList.toggle('active', type === 'ouverte');
+  document.getElementById('nsOptionsWrap').classList.toggle('hidden', type === 'ouverte');
+}
+
+function addNsOption(){
+  nsOptionCount++;
+  const wrap = document.getElementById('nsOptions');
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.innerHTML = `<input type="text" placeholder="Option ${nsOptionCount}"><button type="button">✕</button>`;
+  row.querySelector('button').onclick = () => row.remove();
+  wrap.appendChild(row);
+}
+
+function openSondageResults(id){
+  const s = allSondages.find(x => x.id === id);
+  if(!s) return;
+  const modal = document.getElementById('sondageResultsModal');
+  document.getElementById('srQuestion').textContent = s.question;
+  document.getElementById('srMeta').textContent = (s.type === 'choix' ? 'Choix multiple' : 'Réponse libre') + ' · Réponses anonymes';
+  document.getElementById('srToggleActif').textContent = s.actif ? '⏸ Fermer le sondage' : '▶ Réouvrir';
+  document.getElementById('srContent').innerHTML = '<div class="spin"></div>';
+  modal.classList.remove('hidden');
+
+  document.getElementById('srClose').onclick = () => {
+    modal.classList.add('hidden');
+    if(sondageResultsUnsub){ sondageResultsUnsub(); sondageResultsUnsub = null; }
+  };
+  document.getElementById('srToggleActif').onclick = async () => {
+    await updateDoc(doc(db, SONDAGES_COL, id), { actif: !s.actif });
+    modal.classList.add('hidden');
+    if(sondageResultsUnsub){ sondageResultsUnsub(); sondageResultsUnsub = null; }
+  };
+  document.getElementById('srDelete').onclick = async () => {
+    if(!confirm('Supprimer ce sondage et toutes ses réponses ? Cette action est irréversible.')) return;
+    const repSnap = await getDocs(collection(db, SONDAGES_COL, id, 'reponses'));
+    for(const d of repSnap.docs){ await deleteDoc(d.ref); }
+    await deleteDoc(doc(db, SONDAGES_COL, id));
+    modal.classList.add('hidden');
+    if(sondageResultsUnsub){ sondageResultsUnsub(); sondageResultsUnsub = null; }
+  };
+
+  if(sondageResultsUnsub) sondageResultsUnsub();
+  sondageResultsUnsub = onSnapshot(collection(db, SONDAGES_COL, id, 'reponses'), snap => {
+    const reponses = snap.docs.map(d => d.data());
+    renderSondageResults(s, reponses);
+  });
+}
+
+function renderSondageResults(s, reponses){
+  const el = document.getElementById('srContent');
+  if(!reponses.length){
+    el.innerHTML = '<div class="result-empty">Aucune réponse pour le moment.</div>';
+    return;
+  }
+  if(s.type === 'choix'){
+    const total = reponses.length;
+    el.innerHTML = (s.options||[]).map(opt => {
+      const n = reponses.filter(r => r.valeur === opt).length;
+      const pct = total ? Math.round(n / total * 100) : 0;
+      return `<div class="result-row">
+        <div class="rr-label"><span>${esc(opt)}</span><span>${n} · ${pct}%</span></div>
+        <div class="result-bar-bg"><div class="result-bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('') + `<div style="font-size:11.5px;color:#94a3b8;margin-top:6px">${total} réponse${total>1?'s':''} au total</div>`;
+  } else {
+    el.innerHTML = reponses.map(r => `<div class="result-text-item">${esc(r.valeur)}</div>`).join('');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACTUALITÉS — CÔTÉ ADMIN (vidéos YouTube & événements)
+// ═══════════════════════════════════════════════════════════════
+let allActus = [];
+let actusUnsub = null;
+let naGalerieCount = 0;
+
+function openAdminActus(){
+  showScreen('adminActus');
+  document.getElementById('actusBackBtn').onclick = () => {
+    if(actusUnsub){ actusUnsub(); actusUnsub = null; }
+    showScreen('adminList');
+  };
+  document.getElementById('fabNewActu').onclick = openNewActuModal;
+
+  if(actusUnsub) actusUnsub();
+  actusUnsub = onSnapshot(query(collection(db, PUBLICATIONS_COL), orderBy('createdAt','desc')), snap => {
+    allActus = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderActusList();
+  });
+}
+
+function renderActusList(){
+  const el = document.getElementById('actusList');
+  if(!allActus.length){
+    el.innerHTML = '<div class="empty-list">Aucune publication.<br>Touchez ＋ pour en créer une.</div>';
+    return;
+  }
+  el.innerHTML = allActus.map(p => {
+    let thumbStyle = '';
+    let thumbContent = p.type === 'video' ? '🎬' : '📅';
+    if(p.type === 'video'){
+      const yid = extractYoutubeId(p.youtubeUrl);
+      if(yid){ thumbStyle = `style="background-image:url('https://img.youtube.com/vi/${yid}/mqdefault.jpg')"`; thumbContent = ''; }
+    } else if(p.imageUrl){
+      thumbStyle = `style="background-image:url('${esc(p.imageUrl)}')"`; thumbContent = '';
+    }
+    return `
+    <div class="pub-item">
+      <div class="pi-ico" ${thumbStyle}>${thumbContent}</div>
+      <div class="pi-mid">
+        <div class="pi-title">${esc(p.titre || '(sans titre)')}</div>
+        <div class="pi-date"><span class="pi-tag type-${p.type}">${p.type === 'video' ? 'Vidéo' : 'Événement'}</span>${esc(fmtDay(p.createdAt))}</div>
+      </div>
+      <button class="pi-del" data-id="${esc(p.id)}">🗑</button>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('.pi-del').forEach(btn => {
+    btn.onclick = async () => {
+      if(!confirm('Supprimer cette publication ?')) return;
+      await deleteDoc(doc(db, PUBLICATIONS_COL, btn.dataset.id));
+    };
+  });
+}
+
+function openNewActuModal(){
+  const modal = document.getElementById('newActuModal');
+  document.getElementById('naTitre').value = '';
+  document.getElementById('naYoutube').value = '';
+  document.getElementById('naTexte').value = '';
+  document.getElementById('naImage').value = '';
+  naGalerieCount = 0;
+  document.getElementById('naGalerie').innerHTML = '';
+  setActuType('video');
+  modal.classList.remove('hidden');
+
+  document.getElementById('naTypeVideo').onclick = () => setActuType('video');
+  document.getElementById('naTypeEvent').onclick = () => setActuType('evenement');
+  document.getElementById('naAddPhoto').onclick = addNaGaleriePhoto;
+  document.getElementById('naCancel').onclick = () => modal.classList.add('hidden');
+  document.getElementById('naCreate').onclick = async () => {
+    const titre = document.getElementById('naTitre').value.trim();
+    if(!titre){ alert('Veuillez saisir un titre.'); return; }
+    const type = document.getElementById('naTypeVideo').classList.contains('active') ? 'video' : 'evenement';
+    const texte = document.getElementById('naTexte').value.trim();
+    const pub = { titre, texte, type, createdAt: serverTimestamp() };
+
+    if(type === 'video'){
+      const youtubeUrl = document.getElementById('naYoutube').value.trim();
+      if(!extractYoutubeId(youtubeUrl)){ alert('Lien YouTube invalide. Vérifiez le lien collé.'); return; }
+      pub.youtubeUrl = youtubeUrl;
+    } else {
+      pub.imageUrl = document.getElementById('naImage').value.trim();
+      pub.galerie = [...document.querySelectorAll('#naGalerie input')].map(i => i.value.trim()).filter(Boolean);
+    }
+
+    try {
+      await addDoc(collection(db, PUBLICATIONS_COL), pub);
+    } catch(e) {
+      console.error('Erreur publication actu :', e);
+      alert('Erreur : la publication n\'a pas pu être envoyée.\n' + (e && e.message ? e.message : e));
+      return;
+    }
+    modal.classList.add('hidden');
+  };
+}
+
+function setActuType(type){
+  document.getElementById('naTypeVideo').classList.toggle('active', type === 'video');
+  document.getElementById('naTypeEvent').classList.toggle('active', type === 'evenement');
+  document.getElementById('naVideoWrap').classList.toggle('hidden', type !== 'video');
+  document.getElementById('naEventWrap').classList.toggle('hidden', type !== 'evenement');
+}
+
+function addNaGaleriePhoto(){
+  naGalerieCount++;
+  const wrap = document.getElementById('naGalerie');
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.innerHTML = `<input type="text" placeholder="https://i.postimg.cc/..."><button type="button">✕</button>`;
+  row.querySelector('button').onclick = () => row.remove();
+  wrap.appendChild(row);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CÔTÉ ADMIN — CONVERSATION
+// ═══════════════════════════════════════════════════════════════
+let adminPendingFile = null;
+let currentAdminToken = null;
+let adminUnsub = null;
+let adminMode = 'private';
+
+function openAdminChat(token){
+  adminMode = 'private';
+  currentAdminToken = token;
+  const data = allEleves.find(e => e.id === token) || {};
+  document.getElementById('adminChatAv').textContent = initials(data.nom);
+  document.getElementById('adminChatName').textContent = data.nom || '—';
+  document.getElementById('adminChatSub').textContent = data.classe || '—';
+  document.getElementById('adminDeleteBtn').classList.remove('hidden');
+  showScreen('adminChat');
+
+  const ref = doc(db, ELEVES_COL, token);
+  updateDoc(ref, { unreadAdmin: 0 }).catch(()=>{});
+
+  if(adminUnsub) adminUnsub();
+  const msgsCol = collection(db, ELEVES_COL, token, 'messages');
+  adminUnsub = onSnapshot(query(msgsCol, orderBy('at','asc')), snap => {
+    const list = snap.docs.map(d => ({ ...d.data(), _ref: d.ref }));
+    renderMessages('adminMsgs', list, { mode: 'private', isOut: m => m.from === 'admin' });
+    updateDoc(ref, { unreadAdmin: 0 }).catch(()=>{});
+    markIncomingRead(list, 'admin');
+  });
+
+  document.getElementById('adminBackBtn').onclick = () => {
+    if(adminUnsub){ adminUnsub(); adminUnsub = null; }
+    showScreen('adminList');
+  };
+
+  document.getElementById('adminDeleteBtn').onclick = async () => {
+    if(!confirm(`Supprimer toute la conversation avec ${data.nom} ? Cette action est irréversible.`)) return;
+    const msgsSnap = await getDocs(collection(db, ELEVES_COL, token, 'messages'));
+    for(const d of msgsSnap.docs){ await deleteDoc(d.ref); }
+    await deleteDoc(ref);
+    if(adminUnsub){ adminUnsub(); adminUnsub = null; }
+    showScreen('adminList');
+  };
+
+  wireAdminToolbar('private', token);
+}
+
+function openAdminGroupChat(){
+  adminMode = 'group';
+  currentAdminToken = null;
+  document.getElementById('adminChatAv').textContent = '👥';
+  document.getElementById('adminChatName').textContent = 'Groupe classe';
+  document.getElementById('adminChatSub').textContent = 'Visible par tous les élèves';
+  document.getElementById('adminDeleteBtn').classList.add('hidden');
+  showScreen('adminChat');
+
+  if(adminUnsub) adminUnsub();
+  adminUnsub = onSnapshot(query(collection(db, GROUP_COL), orderBy('at','asc')), snap => {
+    const list = snap.docs.map(d => ({ ...d.data(), _ref: d.ref }));
+    renderMessages('adminMsgs', list, { mode: 'group', isOut: m => m.fromRole === 'admin' });
+  });
+
+  document.getElementById('adminBackBtn').onclick = () => {
+    if(adminUnsub){ adminUnsub(); adminUnsub = null; }
+    showScreen('adminList');
+  };
+
+  wireAdminToolbar('group', null);
+}
+
+function wireAdminToolbar(mode, token){
+  const input = document.getElementById('adminInput');
+  const sendBtn = document.getElementById('adminSendBtn');
+  const attachBtn = document.getElementById('adminAttachBtn');
+  const fileInput = document.getElementById('fileInputAdmin');
+
+  input.value = '';
+  document.getElementById('adminPreview').innerHTML = '';
+  adminPendingFile = null;
+  autoGrow(input);
+  attachBtn.onclick = () => fileInput.click();
+  fileInput.onchange = () => handleFileSelect(fileInput, 'adminPreview', f => adminPendingFile = f);
+  sendBtn.onclick = () => sendChatMessage({
+    mode, token, role: 'admin', nom: 'Professeur',
+    input, previewId: 'adminPreview',
+    getPending: () => adminPendingFile, setPending: f => adminPendingFile = f, sendBtn
+  });
+  input.onkeydown = e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendBtn.click(); } };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENVOI / AFFICHAGE DES MESSAGES (partagé)
+// ═══════════════════════════════════════════════════════════════
+function autoGrow(el){
+  el.addEventListener('input', () => { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 90) + 'px'; });
+}
+
+function handleFileSelect(fileInput, previewId, setPending){
+  const file = fileInput.files[0];
+  fileInput.value = '';
+  if(!file) return;
+  const isImage = file.type.startsWith('image/');
+  const isPdf = file.type === 'application/pdf';
+  if(!isImage && !isPdf){ alert('Seuls les fichiers PDF et images sont acceptés.'); return; }
+  setPending(file);
+  const el = document.getElementById(previewId);
+  el.innerHTML = `<div class="preview-chip">
+    ${isImage ? `<img src="${URL.createObjectURL(file)}">` : `<span style="font-size:20px">📄</span>`}
+    <span class="pc-name">${esc(file.name)} · ${fmtSize(file.size)}</span>
+    <button class="pc-close" id="pcClose_${previewId}">✕</button>
+  </div>`;
+  document.getElementById('pcClose_' + previewId).onclick = () => { setPending(null); el.innerHTML = ''; };
+}
+
+async function sendChatMessage({ mode, token, role, nom, input, previewId, getPending, setPending, sendBtn }){
+  const text = input.value.trim();
+  const file = getPending();
+  if(!text && !file) return;
+  sendBtn.disabled = true;
+
+  try {
+    const msg = { text: text || '', at: serverTimestamp() };
+    if(file){
+      const isImage = file.type.startsWith('image/');
+      const dataUrl = await fileToDataURL(file);
+      msg.type = isImage ? 'image' : 'pdf';
+      msg.data = dataUrl;
+      msg.fileName = file.name;
+      msg.fileSize = file.size;
+    } else {
+      msg.type = 'text';
+    }
+
+    if(mode === 'private'){
+      msg.from = role;
+      msg.read = false;
+      await addDoc(collection(db, ELEVES_COL, token, 'messages'), msg);
+      const preview = file ? (file.type.startsWith('image/') ? '📷 Photo' : '📄 ' + file.name) : text;
+      const ref = doc(db, ELEVES_COL, token);
+      await updateDoc(ref, {
+        lastMsg: preview.slice(0, 80),
+        lastAt: serverTimestamp(),
+        [role === 'eleve' ? 'unreadAdmin' : 'unreadEleve']: increment(1)
+      });
+    } else {
+      msg.fromRole = role;
+      msg.fromToken = role === 'admin' ? 'admin' : token;
+      msg.fromNom = role === 'admin' ? 'Professeur' : nom;
+      await addDoc(collection(db, GROUP_COL), msg);
+    }
+
+    input.value = '';
+    input.style.height = 'auto';
+    setPending(null);
+    document.getElementById(previewId).innerHTML = '';
+  } catch(e){
+    alert(e.message || 'Erreur lors de l\'envoi du message.');
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+function markIncomingRead(list, viewerRole){
+  list.forEach(m => {
+    if(m.from !== viewerRole && !m.read && m._ref){
+      updateDoc(m._ref, { read: true }).catch(() => {});
+    }
+  });
+}
+
+function renderMessages(containerId, list, opts){
+  const el = document.getElementById(containerId);
+  if(!list.length){
+    el.innerHTML = '<div class="empty-chat">Aucun message pour le moment.<br>Écrivez le premier message 👋</div>';
+    return;
+  }
+  let html = '';
+  let lastDay = null;
+  list.forEach(m => {
+    const dk = dayKey(m.at);
+    if(dk !== lastDay){
+      html += `<div class="day-sep">${esc(fmtDay(m.at))}</div>`;
+      lastDay = dk;
+    }
+    const out = opts.isOut(m);
+    html += `<div class="msg ${out ? 'out' : 'in'}">`;
+    if(opts.mode === 'group' && !out){
+      html += `<div class="sender-name">${esc(m.fromNom || (m.fromRole === 'admin' ? 'Professeur' : 'Élève'))}</div>`;
+    }
+    if(m.type === 'image'){
+      html += `<img src="${m.data}" onclick="window.__openLightbox('${m.data.replace(/'/g, "\\'")}')">`;
+      if(m.text) html += `<div>${esc(m.text)}</div>`;
+    } else if(m.type === 'pdf'){
+      html += `<a class="file-chip" href="${m.data}" download="${esc(m.fileName||'document.pdf')}">
+        <span class="fc-ico">📄</span>
+        <span style="flex:1;min-width:0">
+          <div class="fc-name">${esc(m.fileName||'document.pdf')}</div>
+          <div class="fc-size">${fmtSize(m.fileSize||0)} · Télécharger</div>
+        </span>
+      </a>`;
+      if(m.text) html += `<div>${esc(m.text)}</div>`;
+    } else {
+      html += esc(m.text);
+    }
+    const ticks = (opts.mode === 'private' && out) ? `<span class="ticks ${m.read ? 'read' : ''}">${m.read ? '✓✓' : '✓'}</span>` : '';
+    html += `<div class="time">${fmtTime(m.at)}${ticks}</div></div>`;
+  });
+  el.innerHTML = html;
+  el.scrollTop = el.scrollHeight;
+}
+
+window.__openLightbox = function(src){
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lightbox').classList.remove('hidden');
+};
+document.getElementById('lbClose').onclick = () => document.getElementById('lightbox').classList.add('hidden');
+document.getElementById('lightbox').onclick = e => { if(e.target.id === 'lightbox') e.currentTarget.classList.add('hidden'); };
+
+// ═══════════════════════════════════════════════════════════════
+// PWA — INSTALLATION & SERVICE WORKER
+// ═══════════════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('chat-sw.js').catch(() => {});
+  });
+}
+let deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  document.getElementById('installBanner').classList.remove('hidden');
+});
+document.getElementById('installBtn').onclick = async () => {
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  document.getElementById('installBanner').classList.add('hidden');
+};
+document.getElementById('installClose').onclick = () => document.getElementById('installBanner').classList.add('hidden');
+</script>
+</body>
+</html>
