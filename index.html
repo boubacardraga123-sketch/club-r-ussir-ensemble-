@@ -97,7 +97,101 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
 .type-choice button{flex:1;padding:9px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;font-size:12px;font-weight:700;color:#64748b;cursor:pointer}
 .type-choice button.active{border-color:var(--accent);background:#eef2ff;color:#4338ca}
 
-/* ── ACTUALITÉS (vidéos & événements) ── */
+/* ── TABLEAU INTERACTIF ── */
+#tableauScreen{background:#0f1420}
+.tb-hdr{background:#1a1f2e;color:#fff;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:5}
+.tb-hdr-title{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-hdr-sub{font-size:10.5px;color:#94a3b8}
+.tb-hdr-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:9px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.tb-hdr-btn.active{background:var(--accent)}
+.tb-hdr-btn:active{background:rgba(255,255,255,.25)}
+.tb-timer{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;background:rgba(255,255,255,.1);padding:5px 9px;border-radius:8px;flex-shrink:0;display:none;align-items:center;gap:4px}
+.tb-timer.show{display:flex}
+.tb-timer.warn{background:#dc2626}
+.tb-canvas-wrap{flex:1;position:relative;overflow:hidden;touch-action:none;background:#fff}
+.tb-canvas-wrap.dragover::after{content:'📄 Déposez l\'image du sujet ici';position:absolute;inset:10px;border:2.5px dashed var(--accent);border-radius:16px;background:rgba(99,102,241,.08);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--accent-dark);z-index:7;pointer-events:none}
+.tb-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+#tbOverlayCanvas{pointer-events:none}
+.tb-cursor-tag{position:absolute;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px 20px 20px 3px;color:#fff;transform:translate(-4px,-100%);pointer-events:none;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:left .06s linear,top .06s linear}
+.tb-locked-banner{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(26,31,46,.9);color:#fbbf24;font-size:11.5px;font-weight:700;padding:7px 14px;border-radius:20px;display:flex;align-items:center;gap:7px;z-index:6;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.tb-raise-btn{background:#f59e0b;color:#1a1f2e;border:none;border-radius:20px;padding:4px 10px;font-size:10.5px;font-weight:800;cursor:pointer;flex-shrink:0}
+.tb-toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#1a1f2e;color:#fff;font-size:12px;font-weight:600;padding:9px 15px;border-radius:20px;z-index:8;box-shadow:0 4px 14px rgba(0,0,0,.3);display:flex;align-items:center;gap:8px;animation:pubIn .25s ease both}
+.tb-toast button{background:#fff;color:#1a1f2e;border:none;border-radius:14px;padding:3px 10px;font-size:10.5px;font-weight:800;cursor:pointer}
+.tb-bottombar{background:#1a1f2e;flex-shrink:0;padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:5;box-shadow:0 -2px 10px rgba(0,0,0,.2)}
+.tb-tools-row{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,.08)}
+.tb-tools-row::-webkit-scrollbar{display:none}
+.tb-tool-btn{flex:0 0 auto;width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.06);border:1.5px solid transparent;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.tb-tool-btn.active{background:var(--accent);border-color:var(--accent2)}
+.tb-tool-sep{flex:0 0 auto;width:1px;background:rgba(255,255,255,.15);margin:4px 2px}
+.tb-row2{display:flex;align-items:center;gap:8px}
+.tb-colors{display:flex;gap:6px;flex:1;overflow-x:auto;scrollbar-width:none}
+.tb-colors::-webkit-scrollbar{display:none}
+.tb-swatch{width:24px;height:24px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.15);cursor:pointer}
+.tb-swatch.active{border-color:#fff;transform:scale(1.15)}
+.tb-sizes{display:flex;gap:5px;flex-shrink:0}
+.tb-size-btn{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.06);border:1.5px solid transparent;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.tb-size-btn.active{border-color:var(--accent)}
+.tb-size-dot{background:#fff;border-radius:50%}
+.tb-panel{position:absolute;bottom:0;left:0;right:0;background:#1a1f2e;border-radius:18px 18px 0 0;padding:16px;z-index:12;box-shadow:0 -6px 20px rgba(0,0,0,.3);max-height:60%;overflow-y:auto}
+.tb-panel h3{font-family:'Syne',sans-serif;color:#fff;font-size:14px;margin-bottom:12px}
+.tb-panel-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.1);border:none;color:#fff;width:26px;height:26px;border-radius:8px;font-size:13px;cursor:pointer}
+.tb-bg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tb-bg-opt{border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,.1);cursor:pointer;background:#fff;height:70px;position:relative}
+.tb-bg-opt.active{border-color:var(--accent)}
+.tb-bg-opt span{position:absolute;bottom:4px;left:6px;font-size:9.5px;font-weight:800;color:#1a1f2e;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:5px}
+.tb-import-row{background:rgba(255,255,255,.06);color:#fff;border:none;border-radius:11px;padding:11px;font-size:12.5px;font-weight:700;width:100%;margin-top:10px;cursor:pointer;display:flex;align-items:center;gap:8px;justify-content:center}
+.tb-timer-presets{display:flex;gap:8px;margin-top:10px}
+.tb-timer-presets button{flex:1;background:rgba(255,255,255,.06);color:#fff;border:none;border-radius:10px;padding:10px 4px;font-size:12.5px;font-weight:700;cursor:pointer}
+.tb-timer-presets button:active{background:var(--accent)}
+.tb-overlay-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;z-index:11}
+
+/* ── REPLAY DU TABLEAU ── */
+.tb-replay-modal{position:fixed;inset:0;background:#0f1420;z-index:15;display:flex;flex-direction:column}
+.tb-replay-modal.hidden{display:none}
+.tb-replay-hdr{background:#1a1f2e;color:#fff;padding:10px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tb-replay-hdr .tb-hdr-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:9px;font-size:14px;cursor:pointer;flex-shrink:0}
+.tb-replay-title{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;flex:1}
+.tb-replay-count{font-family:'DM Mono',monospace;font-size:11.5px;color:#94a3b8}
+.tb-replay-canvas-wrap{flex:1;position:relative;background:#fff}
+.tb-replay-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.tb-replay-controls{background:#1a1f2e;flex-shrink:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:9px}
+.tb-replay-scrub{width:100%;accent-color:var(--accent)}
+.tb-replay-btns{display:flex;align-items:center;gap:10px}
+.tb-replay-play{width:44px;height:44px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:17px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.tb-replay-speed{background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0}
+.tb-replay-elapsed{color:#94a3b8;font-size:11px;font-family:'DM Mono',monospace;flex:1;text-align:right}
+
+/* ── BIBLIOTHÈQUE DE TABLEAUX ── */
+.tb-lib-modal{position:fixed;inset:0;background:#0f1420;z-index:15;display:flex;flex-direction:column}
+.tb-lib-modal.hidden{display:none}
+.tb-lib-hdr{background:#1a1f2e;color:#fff;padding:10px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tb-lib-hdr .tb-hdr-btn{background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:9px;font-size:14px;cursor:pointer;flex-shrink:0}
+.tb-lib-title{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:800;flex:1}
+.tb-lib-list{flex:1;overflow-y:auto;padding:12px}
+.tb-lib-empty{text-align:center;color:#5f6884;font-size:12.5px;padding:60px 20px}
+.tb-lib-item{background:#1a1f2e;border-radius:14px;padding:13px 14px;margin-bottom:10px;display:flex;align-items:center;gap:11px;cursor:pointer}
+.tb-lib-item:active{background:#232a3d}
+.tb-lib-ico{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.tb-lib-mid{flex:1;min-width:0}
+.tb-lib-name{font-size:13.5px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-lib-meta{font-size:11px;color:#94a3b8;margin-top:2px}
+.tb-lib-del{background:rgba(239,68,68,.15);color:#f87171;border:none;width:32px;height:32px;border-radius:9px;font-size:14px;cursor:pointer;flex-shrink:0}
+.tb-save-input{width:100%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;border-radius:10px;padding:11px 13px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px}
+.tb-save-input::placeholder{color:#5f6884}
+.tb-save-check{display:flex;align-items:center;gap:8px;color:#c3c9d6;font-size:12.5px;margin-bottom:14px}
+.tb-save-actions{display:flex;gap:8px}
+.tb-save-actions button{flex:1;border:none;border-radius:11px;padding:11px;font-size:13px;font-weight:700;cursor:pointer}
+.tb-save-cancel{background:rgba(255,255,255,.08);color:#fff}
+.tb-save-confirm{background:var(--accent);color:#fff}
+
+/* ── MESSAGE DE BIENVENUE ── */
+.welcome-banner{margin:10px 10px 0;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:16px;padding:14px 16px;color:#fff;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.14);animation:pubIn .3s ease both;flex-shrink:0}
+.welcome-banner.hidden{display:none}
+.welcome-banner-close{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.22);border:none;color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.welcome-banner-greet{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;margin-bottom:3px;padding-right:20px}
+.welcome-banner-sub{font-size:12px;opacity:.94;line-height:1.4;padding-right:20px}
+.welcome-banner-countdown{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 11px;font-size:11.5px;font-weight:700;margin-top:9px}
+.welcome-banner-flash{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 11px;font-size:11.5px;font-weight:700;margin-top:9px;margin-left:6px}
 @keyframes pubIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .pub-card{position:relative;background:#fff;border-radius:16px;padding:14px 14px 13px;margin-bottom:14px;box-shadow:0 2px 10px rgba(15,23,42,.07);border:1px solid #eef1f6;overflow:hidden;animation:pubIn .35s ease both}
 .pub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
@@ -303,6 +397,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
       <div class="hdr-title">Professeur</div>
       <div class="hdr-sub" id="studentSub">Club Réussir Ensemble</div>
     </div>
+    <button class="hdr-btn" id="studentTableauBtn" title="Tableau interactif">🖊️</button>
     <button class="hdr-btn" id="studentSettingsBtn" title="Personnaliser">🎨</button>
   </div>
   <div class="chat-tabs">
@@ -314,6 +409,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
     <button class="tab-btn" id="tabSondages" data-tab="sondages">📊 Sondages</button>
     <button class="tab-btn" id="tabActus" data-tab="actus">📰 Actualités</button>
   </div>
+  <div id="studentWelcomeBanner" class="welcome-banner hidden"></div>
   <div class="msgs" id="studentMsgs"></div>
   <div class="msgs hidden" id="studentDevoirsView"></div>
   <div class="msgs hidden" id="studentEdtView"></div>
@@ -361,6 +457,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
     </div>
     <button class="hdr-btn" id="adminActusBtn" title="Actualités">📰</button>
     <button class="hdr-btn" id="adminSondagesBtn" title="Sondages">📊</button>
+    <button class="hdr-btn" id="adminBacDateBtn" title="Date du Bac">🎓</button>
     <button class="hdr-btn" id="adminSettingsBtn" title="Personnaliser">🎨</button>
     <button class="hdr-btn" id="adminLogoutBtn" title="Quitter">↩</button>
   </div>
@@ -379,6 +476,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
       <div class="hdr-title" id="adminChatName">—</div>
       <div class="hdr-sub" id="adminChatSub">—</div>
     </div>
+    <button class="hdr-btn" id="adminTableauBtn" title="Tableau interactif">🖊️</button>
     <button class="hdr-btn" id="adminLinkEdtBtn" title="Lier à une classe (Emploi du temps)">🗓️</button>
     <button class="hdr-btn" id="adminEdtManualBtn" title="Ajouter/modifier son emploi du temps">📅</button>
     <button class="hdr-btn" id="adminProgManualBtn" title="Ajouter/modifier ses notes et présences">🎯</button>
@@ -400,6 +498,89 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
     <span class="rec-time" id="adminRecTime">0:00</span>
     <button class="rec-send" id="adminRecSend">➤</button>
   </div>
+</div>
+
+<!-- TABLEAU INTERACTIF -->
+<div id="tableauScreen" class="screen hidden">
+  <div class="tb-hdr">
+    <button class="tb-hdr-btn" id="tbBackBtn">←</button>
+    <div style="flex:1;min-width:0">
+      <div class="tb-hdr-title" id="tbTitle">Tableau interactif</div>
+      <div class="tb-hdr-sub" id="tbSub">avec —</div>
+    </div>
+    <div class="tb-timer" id="tbTimerBadge">⏱ <span id="tbTimerText">0:00</span></div>
+    <button class="tb-hdr-btn" id="tbReplayBtn" title="Revoir la correction pas à pas">🎬</button>
+    <button class="tb-hdr-btn" id="tbLockBtn" title="Verrouiller le tableau">🔓</button>
+    <button class="tb-hdr-btn" id="tbUndoBtn" title="Annuler mon dernier trait">↩️</button>
+    <button class="tb-hdr-btn" id="tbMenuBtn" title="Plus d'options">⋯</button>
+  </div>
+  <div class="tb-canvas-wrap" id="tbCanvasWrap">
+    <canvas id="tbBaseCanvas"></canvas>
+    <canvas id="tbOverlayCanvas"></canvas>
+    <div id="tbLockedBanner" class="tb-locked-banner hidden">
+      <span>🔒 Le professeur contrôle le tableau</span>
+      <button class="tb-raise-btn" id="tbRaiseBtn">✋ Demander la parole</button>
+    </div>
+    <div id="tbToastWrap"></div>
+  </div>
+  <div class="tb-bottombar">
+    <div class="tb-tools-row">
+      <button class="tb-tool-btn active" data-tool="pen" title="Stylo">✏️</button>
+      <button class="tb-tool-btn" data-tool="eraser" title="Gomme">🧹</button>
+      <button class="tb-tool-btn" data-tool="line" title="Ligne">📏</button>
+      <button class="tb-tool-btn" data-tool="rect" title="Rectangle">▭</button>
+      <button class="tb-tool-btn" data-tool="circle" title="Cercle">⭕</button>
+      <button class="tb-tool-btn" data-tool="arrow" title="Flèche">↗️</button>
+      <button class="tb-tool-btn" data-tool="text" title="Texte">🔤</button>
+      <div class="tb-tool-sep"></div>
+      <button class="tb-tool-btn" id="tbBgBtn" title="Fond / modèle">🧾</button>
+      <button class="tb-tool-btn" id="tbImportBtn" title="Importer une photo">🖼️</button>
+      <button class="tb-tool-btn" id="tbPasteBtn" title="Coller (Ctrl+V)">📋</button>
+      <button class="tb-tool-btn" id="tbTimerBtn" title="Minuteur">⏱️</button>
+      <button class="tb-tool-btn" id="tbExportBtn" title="Envoyer dans le chat">📤</button>
+      <button class="tb-tool-btn" id="tbSaveBtn" title="Enregistrer dans la bibliothèque">💾</button>
+      <button class="tb-tool-btn" id="tbLibBtn" title="Bibliothèque de tableaux">📚</button>
+      <button class="tb-tool-btn" id="tbClearBtn" title="Tout effacer">🗑️</button>
+    </div>
+    <div class="tb-row2">
+      <div class="tb-colors" id="tbColors"></div>
+      <div class="tb-sizes" id="tbSizes">
+        <button class="tb-size-btn" data-size="3"><span class="tb-size-dot" style="width:5px;height:5px"></span></button>
+        <button class="tb-size-btn active" data-size="6"><span class="tb-size-dot" style="width:8px;height:8px"></span></button>
+        <button class="tb-size-btn" data-size="12"><span class="tb-size-dot" style="width:11px;height:11px"></span></button>
+      </div>
+    </div>
+  </div>
+  <input type="file" id="tbImportInput" accept="image/*" class="hidden">
+</div>
+
+<!-- REPLAY DU TABLEAU -->
+<div id="tbReplayModal" class="tb-replay-modal hidden">
+  <div class="tb-replay-hdr">
+    <button class="tb-hdr-btn" id="tbReplayCloseBtn">✕</button>
+    <div class="tb-replay-title" id="tbReplayTitle">🎬 Replay de la correction</div>
+    <div class="tb-replay-count" id="tbReplayCount">0 / 0</div>
+  </div>
+  <div class="tb-replay-canvas-wrap" id="tbReplayCanvasWrap">
+    <canvas id="tbReplayCanvas"></canvas>
+  </div>
+  <div class="tb-replay-controls">
+    <input type="range" class="tb-replay-scrub" id="tbReplayScrub" min="0" max="0" value="0" step="1">
+    <div class="tb-replay-btns">
+      <button class="tb-replay-play" id="tbReplayPlayBtn">▶️</button>
+      <button class="tb-replay-speed" id="tbReplaySpeedBtn">1×</button>
+      <div class="tb-replay-elapsed" id="tbReplayElapsed">Trait 0 / 0</div>
+    </div>
+  </div>
+</div>
+
+<!-- BIBLIOTHÈQUE DE TABLEAUX -->
+<div id="tbLibModal" class="tb-lib-modal hidden">
+  <div class="tb-lib-hdr">
+    <button class="tb-hdr-btn" id="tbLibCloseBtn">✕</button>
+    <div class="tb-lib-title">📚 Bibliothèque de tableaux</div>
+  </div>
+  <div class="tb-lib-list" id="tbLibList"></div>
 </div>
 
 <!-- NEW ELEVE MODAL -->
@@ -894,6 +1075,85 @@ if(eleveToken){
 let studentPendingFile = null;
 let studentToken = null, studentNom = '', studentMode = 'private', studentUnsub = null, studentAvatarUrl = null, studentEdtGroupId = null, studentEdtEleveId = null, studentClasse = '';
 
+// ── MESSAGE DE BIENVENUE ──
+const WELCOME_QUOTES = [
+  "Chaque exercice résolu te rapproche du Bac. 💪",
+  "La régularité bat le talent quand le talent ne travaille pas. 📘",
+  "Un petit pas aujourd'hui, un grand pas au Bac. 🚀",
+  "Révise un peu, mais révise tous les jours. 🔁",
+  "Tu es plus prêt(e) que tu ne le penses. 🌟",
+  "Le club est avec toi — pose tes questions sans hésiter. 🤝",
+  "Un exercice de plus, un doute de moins. ✏️"
+];
+
+function tbGreetingWord(){
+  const h = new Date().getHours();
+  if(h < 12) return 'Bonjour';
+  if(h < 18) return 'Bon après-midi';
+  return 'Bonsoir';
+}
+
+async function showStudentWelcome(){
+  const el = document.getElementById('studentWelcomeBanner');
+  if(!studentToken) return;
+  const today = new Date().toISOString().slice(0, 10);
+  const dismissKey = `crWelcomeDismissed_${studentToken}`;
+  if(localStorage.getItem(dismissKey) === today){ el.classList.add('hidden'); return; }
+
+  let bacDate = null;
+  try {
+    const cfgSnap = await getDoc(doc(db, 'chatConfig', 'general'));
+    if(cfgSnap.exists() && cfgSnap.data().bacDate) bacDate = new Date(cfgSnap.data().bacDate + 'T00:00:00');
+  } catch(e){ /* silencieux */ }
+
+  const firstName = (studentNom || 'Élève').split(' ')[0];
+  const greet = tbGreetingWord();
+  const quote = WELCOME_QUOTES[Math.floor(Math.random() * WELCOME_QUOTES.length)];
+
+  let extraHtml = '';
+  if(bacDate){
+    const diffDays = Math.ceil((bacDate.getTime() - Date.now()) / 86400000);
+    if(diffDays > 0) extraHtml += `<div class="welcome-banner-countdown">🎓 J-${diffDays} avant le Bac</div>`;
+    else if(diffDays === 0) extraHtml += `<div class="welcome-banner-countdown">🎓 C'est aujourd'hui, courage !</div>`;
+  }
+
+  el.innerHTML = `
+    <button class="welcome-banner-close" id="welcomeBannerClose">✕</button>
+    <div class="welcome-banner-greet">${esc(greet)} ${esc(firstName)} 👋</div>
+    <div class="welcome-banner-sub">${esc(quote)}</div>
+    ${extraHtml}
+  `;
+  el.classList.remove('hidden');
+  document.getElementById('welcomeBannerClose').onclick = () => {
+    localStorage.setItem(dismissKey, today);
+    el.classList.add('hidden');
+  };
+}
+
+async function openBacDatePrompt(){
+  let current = '';
+  try {
+    const cfgSnap = await getDoc(doc(db, 'chatConfig', 'general'));
+    if(cfgSnap.exists() && cfgSnap.data().bacDate){
+      const d = new Date(cfgSnap.data().bacDate + 'T00:00:00');
+      current = d.toLocaleDateString('fr-FR');
+    }
+  } catch(e){ /* silencieux */ }
+  const input = prompt(`Date du Bac (JJ/MM/AAAA)${current ? ' — actuelle : ' + current : ''} :`, current || '');
+  if(input === null) return;
+  const trimmed = input.trim();
+  if(!trimmed){
+    await setDoc(doc(db, 'chatConfig', 'general'), { bacDate: null }, { merge: true });
+    alert('Compte à rebours désactivé.');
+    return;
+  }
+  const m = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(!m){ alert('Format invalide. Utilisez JJ/MM/AAAA.'); return; }
+  const iso = `${m[3]}-${String(m[2]).padStart(2,'0')}-${String(m[1]).padStart(2,'0')}`;
+  await setDoc(doc(db, 'chatConfig', 'general'), { bacDate: iso }, { merge: true });
+  alert(`Date du Bac enregistrée : ${trimmed}`);
+}
+
 async function initStudent(token){
   const ref = doc(db, ELEVES_COL, token);
   let snap;
@@ -915,6 +1175,8 @@ async function initStudent(token){
   document.title = 'Messagerie — ' + (data.nom || 'Élève');
   showScreen('studentScreen');
   document.getElementById('studentSettingsBtn').onclick = () => openProfilModal(true);
+  document.getElementById('studentTableauBtn').onclick = () => openTableau(studentToken, 'eleve', 'Professeur');
+  showStudentWelcome();
 
   const input = document.getElementById('studentInput');
   const sendBtn = document.getElementById('studentSendBtn');
@@ -1912,6 +2174,7 @@ function startAdminSession(){
   document.getElementById('fabNewEleve').onclick = openNewEleveModal;
   document.getElementById('adminSondagesBtn').onclick = openAdminSondages;
   document.getElementById('adminActusBtn').onclick = openAdminActus;
+  document.getElementById('adminBacDateBtn').onclick = openBacDatePrompt;
   document.getElementById('adminSettingsBtn').onclick = () => openProfilModal(false);
 
   document.getElementById('groupPinWrap').innerHTML = `
@@ -2425,6 +2688,7 @@ function openAdminChat(token){
     showScreen('adminList');
   };
 
+  document.getElementById('adminTableauBtn').onclick = () => openTableau(token, 'admin', data.nom || 'Élève');
   document.getElementById('adminLinkEdtBtn').onclick = () => openLinkEdtPrompt(token, data.nom);
   document.getElementById('adminEdtManualBtn').onclick = () => openEdtManualModal(token, data.nom);
   document.getElementById('adminProgManualBtn').onclick = () => openProgManualModal(token, data.nom);
@@ -3121,6 +3385,826 @@ window.__openLightbox = function(src){
 };
 document.getElementById('lbClose').onclick = () => document.getElementById('lightbox').classList.add('hidden');
 document.getElementById('lightbox').onclick = e => { if(e.target.id === 'lightbox') e.currentTarget.classList.add('hidden'); };
+
+// ═══════════════════════════════════════════════════════════════
+// TABLEAU INTERACTIF — collaboratif temps réel
+// ═══════════════════════════════════════════════════════════════
+const TB_COL = 'chatTableaux';
+const TB_COLORS = ['#1a1f2e','#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#ffffff'];
+const TB_ROLE_COLOR = { admin: '#6366f1', eleve: '#f59e0b' };
+
+let tbToken = null, tbRole = null, tbOtherName = '', tbReturnScreen = 'studentScreen';
+let tbUnsubBoard = null, tbUnsubTraits = null, tbUnsubLive = null;
+let tbBoardData = {}, tbStrokes = [];
+let tbTool = 'pen', tbColor = TB_COLORS[0], tbSize = 6;
+let tbDrawing = false, tbCurrentPoints = [], tbDrawDisabled = false;
+let tbLiveOther = null, tbLastLiveSent = 0;
+let tbBgImage = null, tbBgImageKey = null;
+let tbTimerHandle = null;
+let tbHandRaiseToastShown = false;
+
+function tbDist(a, b){ return Math.hypot(a.x - b.x, a.y - b.y); }
+
+function tbResizeCanvases(){
+  const wrap = document.getElementById('tbCanvasWrap');
+  const base = document.getElementById('tbBaseCanvas');
+  const overlay = document.getElementById('tbOverlayCanvas');
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  [base, overlay].forEach(c => { if(c.width !== w || c.height !== h){ c.width = w; c.height = h; } });
+  tbRenderBase();
+  tbRenderOverlay();
+}
+window.addEventListener('resize', () => {
+  const scr = document.getElementById('tableauScreen');
+  if(scr && !scr.classList.contains('hidden')) tbResizeCanvases();
+});
+
+function tbPx(pt, w, h){ return { x: pt.x * w, y: pt.y * h }; }
+
+function tbDrawBackground(ctx, w, h){
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  const bg = tbBoardData.background;
+  if(!bg || bg.type === 'template' && bg.id === 'blank') return;
+  if(bg.type === 'image'){
+    const key = bg.data.slice(0, 60);
+    if(tbBgImageKey !== key){
+      tbBgImageKey = key;
+      const img = new Image();
+      img.onload = () => { tbBgImage = img; tbRenderBase(); };
+      img.src = bg.data;
+      return;
+    }
+    if(tbBgImage){
+      const scale = Math.min(w / tbBgImage.width, h / tbBgImage.height);
+      const iw = tbBgImage.width * scale, ih = tbBgImage.height * scale;
+      ctx.drawImage(tbBgImage, (w - iw) / 2, (h - ih) / 2, iw, ih);
+    }
+    return;
+  }
+  if(bg.type === 'template'){
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    if(bg.id === 'grid'){
+      for(let x = 0; x < w; x += 26){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for(let y = 0; y < h; y += 26){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    } else if(bg.id === 'lines'){
+      for(let y = 30; y < h; y += 30){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    } else if(bg.id === 'axes'){
+      for(let x = 0; x < w; x += 26){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for(let y = 0; y < h; y += 26){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      const cx = w / 2, cy = h / 2;
+      ctx.strokeStyle = '#1a1f2e'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, h - 10); ctx.lineTo(cx, 10); ctx.stroke();
+      [[w-10,cy,-8,-5],[w-10,cy,-8,5],[cx,10,-5,8],[cx,10,5,8]].forEach(([x,y,dx,dy])=>{
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+dx,y+dy); ctx.stroke();
+      });
+    }
+  }
+}
+
+function tbDrawStroke(ctx, s, w, h){
+  ctx.save();
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.strokeStyle = s.color || '#1a1f2e';
+  ctx.fillStyle = s.color || '#1a1f2e';
+  ctx.lineWidth = s.width || 6;
+  ctx.globalCompositeOperation = s.tool === 'eraser' ? 'destination-out' : 'source-over';
+  const pts = (s.points || []).map(p => tbPx(p, w, h));
+  if(s.tool === 'pen' || s.tool === 'eraser'){
+    if(pts.length < 2){ ctx.restore(); return; }
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    for(let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+  } else if(s.tool === 'line' || s.tool === 'arrow'){
+    if(pts.length < 2){ ctx.restore(); return; }
+    const [p0, p1] = pts;
+    ctx.beginPath(); ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y); ctx.stroke();
+    if(s.tool === 'arrow'){
+      const ang = Math.atan2(p1.y - p0.y, p1.x - p0.x), size = 8 + (s.width || 6);
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p1.x - size * Math.cos(ang - 0.4), p1.y - size * Math.sin(ang - 0.4));
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p1.x - size * Math.cos(ang + 0.4), p1.y - size * Math.sin(ang + 0.4));
+      ctx.stroke();
+    }
+  } else if(s.tool === 'rect'){
+    if(pts.length < 2){ ctx.restore(); return; }
+    const [p0, p1] = pts;
+    ctx.strokeRect(Math.min(p0.x,p1.x), Math.min(p0.y,p1.y), Math.abs(p1.x-p0.x), Math.abs(p1.y-p0.y));
+  } else if(s.tool === 'circle'){
+    if(pts.length < 2){ ctx.restore(); return; }
+    const [p0, p1] = pts;
+    const cx = (p0.x+p1.x)/2, cy = (p0.y+p1.y)/2, rx = Math.abs(p1.x-p0.x)/2, ry = Math.abs(p1.y-p0.y)/2;
+    ctx.beginPath(); ctx.ellipse(cx, cy, Math.max(rx,1), Math.max(ry,1), 0, 0, Math.PI*2); ctx.stroke();
+  } else if(s.tool === 'text'){
+    ctx.font = `700 ${Math.max(15, (s.width||6)*3)}px 'DM Sans',sans-serif`;
+    ctx.textBaseline = 'top';
+    ctx.fillText(s.text || '', pts[0].x, pts[0].y);
+  }
+  ctx.restore();
+}
+
+function tbRenderBase(){
+  const canvas = document.getElementById('tbBaseCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  tbDrawBackground(ctx, w, h);
+  tbStrokes.forEach(s => tbDrawStroke(ctx, s, w, h));
+}
+
+function tbRenderOverlay(){
+  const canvas = document.getElementById('tbOverlayCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  if(tbDrawing && tbCurrentPoints.length){
+    tbDrawStroke(ctx, { tool: tbTool, points: tbCurrentPoints, color: tbColor, width: tbSize }, w, h);
+  }
+  if(tbLiveOther && tbLiveOther.active && (tbLiveOther.points||[]).length){
+    tbDrawStroke(ctx, tbLiveOther, w, h);
+    const last = tbPx(tbLiveOther.points[tbLiveOther.points.length-1], w, h);
+    const otherRole = tbRole === 'admin' ? 'eleve' : 'admin';
+    ctx.save();
+    ctx.font = "800 10px 'DM Sans',sans-serif";
+    const label = otherRole === 'admin' ? 'Professeur' : (tbOtherName || 'Élève');
+    const tw = ctx.measureText(label).width;
+    ctx.fillStyle = TB_ROLE_COLOR[otherRole];
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(last.x - 2, last.y - 20, tw + 12, 16, 8) : ctx.rect(last.x - 2, last.y - 20, tw + 12, 16);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillText(label, last.x + 4, last.y - 17);
+    ctx.restore();
+  }
+}
+
+function tbShowToast(msg, actionLabel, actionFn, persistent){
+  const wrap = document.getElementById('tbToastWrap');
+  const el = document.createElement('div');
+  el.className = 'tb-toast';
+  el.innerHTML = `<span>${esc(msg)}</span>`;
+  if(actionLabel){
+    const btn = document.createElement('button');
+    btn.textContent = actionLabel;
+    btn.onclick = () => { actionFn && actionFn(); el.remove(); };
+    el.appendChild(btn);
+  }
+  wrap.appendChild(el);
+  if(!persistent) setTimeout(() => el.remove(), 4000);
+  return el;
+}
+
+function tbApplyBoardState(){
+  const locked = tbBoardData.locked === 'admin';
+  tbDrawDisabled = locked && tbRole !== 'admin';
+  document.getElementById('tbLockedBanner').classList.toggle('hidden', !tbDrawDisabled);
+  document.getElementById('tbLockBtn').classList.toggle('hidden', tbRole !== 'admin');
+  document.getElementById('tbLockBtn').textContent = locked ? '🔒' : '🔓';
+  document.getElementById('tbClearBtn').style.opacity = tbRole === 'admin' ? '1' : '.45';
+
+  if(tbRole === 'admin' && tbBoardData.handRaise && !tbHandRaiseToastShown){
+    tbHandRaiseToastShown = true;
+    tbShowToast(`✋ ${tbOtherName || 'L\'élève'} demande la parole`, '🔓 Déverrouiller', async () => {
+      await setDoc(doc(db, TB_COL, tbToken), { locked: null, handRaise: false }, { merge: true });
+    }, true);
+  }
+  if(!tbBoardData.handRaise) tbHandRaiseToastShown = false;
+
+  tbRenderBase();
+
+  const badge = document.getElementById('tbTimerBadge');
+  if(tbTimerHandle){ clearInterval(tbTimerHandle); tbTimerHandle = null; }
+  if(tbBoardData.timerEndsAt){
+    badge.classList.add('show');
+    const tick = () => {
+      const remain = Math.max(0, Math.round((tbBoardData.timerEndsAt - Date.now()) / 1000));
+      const m = Math.floor(remain / 60), s = remain % 60;
+      document.getElementById('tbTimerText').textContent = `${m}:${String(s).padStart(2,'0')}`;
+      badge.classList.toggle('warn', remain <= 30 && remain > 0);
+      if(remain <= 0 && tbTimerHandle){ clearInterval(tbTimerHandle); tbTimerHandle = null; }
+    };
+    tick();
+    tbTimerHandle = setInterval(tick, 1000);
+  } else {
+    badge.classList.remove('show');
+  }
+}
+
+function tbNormPt(e){
+  const wrap = document.getElementById('tbCanvasWrap');
+  const rect = wrap.getBoundingClientRect();
+  return {
+    x: Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width)),
+    y: Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height))
+  };
+}
+
+async function tbCommitStroke(s){
+  try {
+    await setDoc(doc(db, TB_COL, tbToken), { updatedAt: serverTimestamp() }, { merge: true });
+    await addDoc(collection(db, TB_COL, tbToken, 'traits'), { ...s, author: tbRole, at: serverTimestamp() });
+  } catch(e){ tbShowToast("Erreur d'enregistrement du trait."); }
+}
+
+async function tbSendLive(active){
+  try {
+    await setDoc(doc(db, TB_COL, tbToken, 'live', tbRole), {
+      tool: tbTool, color: tbColor, width: tbSize, points: active ? tbCurrentPoints : [], active
+    });
+  } catch(e){ /* silencieux */ }
+}
+
+function tbPointerDown(e){
+  if(tbDrawDisabled){ tbShowToast('🔒 Le professeur contrôle le tableau.'); return; }
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  const p = tbNormPt(e);
+  if(tbTool === 'text'){
+    const txt = prompt('Texte à ajouter au tableau :');
+    if(txt && txt.trim()) tbCommitStroke({ tool: 'text', text: txt.trim(), points: [p], color: tbColor, width: tbSize });
+    return;
+  }
+  tbDrawing = true;
+  tbCurrentPoints = [p];
+  document.getElementById('tbCanvasWrap').setPointerCapture(e.pointerId);
+  tbRenderOverlay();
+}
+function tbPointerMove(e){
+  if(!tbDrawing) return;
+  const p = tbNormPt(e);
+  if(tbTool === 'pen' || tbTool === 'eraser'){
+    const last = tbCurrentPoints[tbCurrentPoints.length - 1];
+    if(!last || tbDist(last, p) > 0.004) tbCurrentPoints.push(p);
+  } else {
+    tbCurrentPoints = [tbCurrentPoints[0], p];
+  }
+  tbRenderOverlay();
+  const now = Date.now();
+  if(now - tbLastLiveSent > 90){ tbLastLiveSent = now; tbSendLive(true); }
+}
+function tbPointerUp(){
+  if(!tbDrawing) return;
+  tbDrawing = false;
+  const needsTwo = tbTool === 'pen' || tbTool === 'eraser';
+  if(tbCurrentPoints.length >= (needsTwo ? 2 : 2)){
+    tbCommitStroke({ tool: tbTool, points: tbCurrentPoints, color: tbColor, width: tbSize });
+  }
+  tbCurrentPoints = [];
+  tbSendLive(false);
+  tbRenderOverlay();
+}
+
+async function tbUndo(){
+  const mine = tbStrokes.filter(s => s.author === tbRole);
+  if(!mine.length){ tbShowToast('Rien à annuler.'); return; }
+  const last = mine[mine.length - 1];
+  await deleteDoc(doc(db, TB_COL, tbToken, 'traits', last.id)).catch(() => {});
+}
+
+function tbClosePanels(){
+  document.querySelectorAll('.tb-overlay-modal').forEach(el => el.remove());
+}
+
+function tbOpenBgPanel(){
+  tbClosePanels();
+  const opts = [
+    { id: 'blank', label: 'Blanc', css: '#fff' },
+    { id: 'grid', label: 'Quadrillé', css: 'repeating-linear-gradient(#f1f5f9 0 1px,transparent 1px 26px),repeating-linear-gradient(90deg,#f1f5f9 0 1px,transparent 1px 26px)' },
+    { id: 'lines', label: 'Ligné', css: 'repeating-linear-gradient(#f1f5f9 0 1px,transparent 1px 30px)' },
+    { id: 'axes', label: 'Axes gradués', css: 'repeating-linear-gradient(#f1f5f9 0 1px,transparent 1px 26px),repeating-linear-gradient(90deg,#f1f5f9 0 1px,transparent 1px 26px)' }
+  ];
+  const bg = tbBoardData.background;
+  const activeId = bg && bg.type === 'template' ? bg.id : (bg ? null : 'blank');
+  const wrap = document.createElement('div');
+  wrap.className = 'tb-overlay-modal';
+  wrap.innerHTML = `<div class="tb-panel">
+    <button class="tb-panel-close" id="tbBgClose">✕</button>
+    <h3>🧾 Fond du tableau</h3>
+    <div class="tb-bg-grid">${opts.map(o => `<div class="tb-bg-opt ${o.id===activeId?'active':''}" data-id="${o.id}" style="background:${o.css}"><span>${o.label}</span></div>`).join('')}</div>
+    <button class="tb-import-row" id="tbImportRow">🖼️ Importer une photo à annoter</button>
+  </div>`;
+  document.body.appendChild(wrap);
+  wrap.onclick = e => { if(e.target === wrap) wrap.remove(); };
+  document.getElementById('tbBgClose').onclick = () => wrap.remove();
+  wrap.querySelectorAll('.tb-bg-opt').forEach(el => {
+    el.onclick = async () => {
+      await setDoc(doc(db, TB_COL, tbToken), { background: { type: 'template', id: el.dataset.id } }, { merge: true });
+      tbBgImage = null; tbBgImageKey = null;
+      wrap.remove();
+    };
+  });
+  document.getElementById('tbImportRow').onclick = () => { wrap.remove(); document.getElementById('tbImportInput').click(); };
+}
+
+function tbOpenTimerPanel(){
+  if(tbRole !== 'admin'){ tbShowToast('Seul le professeur peut lancer le minuteur.'); return; }
+  tbClosePanels();
+  const wrap = document.createElement('div');
+  wrap.className = 'tb-overlay-modal';
+  wrap.innerHTML = `<div class="tb-panel">
+    <button class="tb-panel-close" id="tbTmClose">✕</button>
+    <h3>⏱️ Minuteur</h3>
+    <div class="tb-timer-presets">
+      <button data-m="5">5 min</button><button data-m="10">10 min</button>
+      <button data-m="15">15 min</button><button data-m="20">20 min</button>
+    </div>
+    ${tbBoardData.timerEndsAt ? '<button class="tb-import-row" id="tbTmStop">⏹️ Arrêter le minuteur</button>' : ''}
+  </div>`;
+  document.body.appendChild(wrap);
+  wrap.onclick = e => { if(e.target === wrap) wrap.remove(); };
+  document.getElementById('tbTmClose').onclick = () => wrap.remove();
+  wrap.querySelectorAll('[data-m]').forEach(btn => {
+    btn.onclick = async () => {
+      const min = Number(btn.dataset.m);
+      await setDoc(doc(db, TB_COL, tbToken), { timerEndsAt: Date.now() + min * 60000, timerDuration: min * 60 }, { merge: true });
+      wrap.remove();
+    };
+  });
+  const stopBtn = document.getElementById('tbTmStop');
+  if(stopBtn) stopBtn.onclick = async () => { await setDoc(doc(db, TB_COL, tbToken), { timerEndsAt: null }, { merge: true }); wrap.remove(); };
+}
+
+async function tbExportToChat(){
+  const canvas = document.getElementById('tbBaseCanvas');
+  let quality = 0.82, dataUrl = canvas.toDataURL('image/jpeg', quality);
+  let attempt = 0;
+  while(dataUrl.length > MAX_B64_LEN && attempt < 4){
+    quality = Math.max(0.35, quality - 0.15);
+    dataUrl = canvas.toDataURL('image/jpeg', quality);
+    attempt++;
+  }
+  if(dataUrl.length > MAX_B64_LEN){ tbShowToast("Le tableau est trop volumineux pour être envoyé."); return; }
+  try {
+    await addDoc(collection(db, ELEVES_COL, tbToken, 'messages'), {
+      text: '', type: 'image', data: dataUrl, at: serverTimestamp(), from: tbRole, read: false
+    });
+    await updateDoc(doc(db, ELEVES_COL, tbToken), {
+      lastMsg: '🖊️ Tableau partagé', lastAt: serverTimestamp(),
+      [tbRole === 'eleve' ? 'unreadAdmin' : 'unreadEleve']: increment(1)
+    });
+    tbShowToast('✅ Envoyé dans la discussion');
+  } catch(e){ tbShowToast("Erreur lors de l'envoi."); }
+}
+
+function openTableau(token, role, otherName){
+  tbToken = token; tbRole = role; tbOtherName = otherName || (role === 'admin' ? 'Élève' : 'Professeur');
+  tbReturnScreen = role === 'eleve' ? 'studentScreen' : 'adminChat';
+  tbStrokes = []; tbBoardData = {}; tbBgImage = null; tbBgImageKey = null; tbHandRaiseToastShown = false;
+  tbTool = 'pen'; tbColor = TB_COLORS[0]; tbSize = 6;
+  document.querySelectorAll('.tb-tool-btn[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === 'pen'));
+  document.querySelectorAll('.tb-size-btn').forEach(b => b.classList.toggle('active', b.dataset.size === '6'));
+  document.getElementById('tbSub').textContent = 'avec ' + tbOtherName;
+  showScreen('tableauScreen');
+  requestAnimationFrame(tbResizeCanvases);
+
+  if(tbUnsubBoard) tbUnsubBoard();
+  tbUnsubBoard = onSnapshot(doc(db, TB_COL, token), snap => { tbBoardData = snap.exists() ? snap.data() : {}; tbApplyBoardState(); });
+
+  if(tbUnsubTraits) tbUnsubTraits();
+  tbUnsubTraits = onSnapshot(query(collection(db, TB_COL, token, 'traits'), orderBy('at', 'asc')), snap => {
+    tbStrokes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    tbRenderBase();
+  });
+
+  if(tbUnsubLive) tbUnsubLive();
+  const otherRole = role === 'admin' ? 'eleve' : 'admin';
+  tbUnsubLive = onSnapshot(doc(db, TB_COL, token, 'live', otherRole), snap => {
+    tbLiveOther = snap.exists() ? snap.data() : null;
+    tbRenderOverlay();
+  });
+}
+
+function closeTableau(){
+  if(tbUnsubBoard){ tbUnsubBoard(); tbUnsubBoard = null; }
+  if(tbUnsubTraits){ tbUnsubTraits(); tbUnsubTraits = null; }
+  if(tbUnsubLive){ tbUnsubLive(); tbUnsubLive = null; }
+  if(tbUnsubLib){ tbUnsubLib(); tbUnsubLib = null; }
+  if(tbTimerHandle){ clearInterval(tbTimerHandle); tbTimerHandle = null; }
+  if(tbToken && tbRole) tbSendLive(false);
+  tbClosePanels();
+  tbReplayPause();
+  document.getElementById('tbReplayModal').classList.add('hidden');
+  document.getElementById('tbLibModal').classList.add('hidden');
+  showScreen(tbReturnScreen);
+}
+
+async function tbSetBackgroundFromBlob(blob){
+  try {
+    const dataUrl = await fileToDataURL(blob);
+    await setDoc(doc(db, TB_COL, tbToken), { background: { type: 'image', data: dataUrl } }, { merge: true });
+    tbShowToast('🖼️ Sujet collé sur le tableau');
+  } catch(e){ tbShowToast(e.message || "Erreur lors du collage de l'image."); }
+}
+
+function tbBoardVisible(){
+  const scr = document.getElementById('tableauScreen');
+  return scr && !scr.classList.contains('hidden');
+}
+
+async function tbPasteFromClipboard(){
+  if(!navigator.clipboard || !navigator.clipboard.read){
+    tbShowToast('Utilisez Ctrl+V, ou 🖼️ pour importer depuis vos fichiers.');
+    return;
+  }
+  try {
+    const items = await navigator.clipboard.read();
+    for(const item of items){
+      const type = item.types.find(t => t.startsWith('image/'));
+      if(type){ const blob = await item.getType(type); await tbSetBackgroundFromBlob(blob); return; }
+    }
+    tbShowToast('Aucune image trouvée dans le presse-papiers.');
+  } catch(e){
+    tbShowToast("Impossible d'accéder au presse-papiers. Essayez Ctrl+V directement.");
+  }
+}
+
+document.addEventListener('paste', e => {
+  if(!tbBoardVisible()) return;
+  const items = (e.clipboardData || {}).items || [];
+  for(const item of items){
+    if(item.type && item.type.startsWith('image/')){
+      const blob = item.getAsFile();
+      if(blob){ e.preventDefault(); tbSetBackgroundFromBlob(blob); return; }
+    }
+  }
+});
+
+// ── REPLAY pas à pas ──
+let tbReplayStrokes = [], tbReplayGaps = [];
+let tbReplayIndex = 0, tbReplayProgress = 0, tbReplayWait = 0;
+let tbReplayPlaying = false, tbReplaySpeed = 1, tbReplayLastTs = null, tbReplayRaf = null;
+let tbReplayBg = null, tbReplayBgImage = null, tbReplayBgImageKey = null;
+
+function tbTsMillis(ts){ return (ts && ts.toDate) ? ts.toDate().getTime() : null; }
+
+function tbStrokeDuration(s){
+  if(!s) return 300;
+  if(s.tool === 'pen' || s.tool === 'eraser') return Math.min(900, Math.max(150, (s.points || []).length * 18));
+  if(s.tool === 'text') return 200;
+  return 350;
+}
+
+function tbPartialStroke(s, progress){
+  if(s.tool === 'pen' || s.tool === 'eraser'){
+    const pts = s.points || [];
+    const n = Math.max(2, Math.ceil(pts.length * progress));
+    return { ...s, points: pts.slice(0, n) };
+  }
+  if(s.tool === 'text'){
+    return progress >= 0.4 ? s : null;
+  }
+  const pts = s.points || [];
+  if(pts.length < 2) return s;
+  const [p0, p1] = pts;
+  const p = { x: p0.x + (p1.x - p0.x) * progress, y: p0.y + (p1.y - p0.y) * progress };
+  return { ...s, points: [p0, p] };
+}
+
+function tbDrawReplayBackground(ctx, w, h){
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, w, h);
+  const bg = tbReplayBg;
+  if(!bg || (bg.type === 'template' && bg.id === 'blank')) return;
+  if(bg.type === 'image'){
+    const key = bg.data.slice(0, 60);
+    if(tbReplayBgImageKey !== key){
+      tbReplayBgImageKey = key;
+      const img = new Image();
+      img.onload = () => { tbReplayBgImage = img; tbRenderReplayFrame(); };
+      img.src = bg.data;
+      return;
+    }
+    if(tbReplayBgImage){
+      const scale = Math.min(w / tbReplayBgImage.width, h / tbReplayBgImage.height);
+      const iw = tbReplayBgImage.width * scale, ih = tbReplayBgImage.height * scale;
+      ctx.drawImage(tbReplayBgImage, (w - iw) / 2, (h - ih) / 2, iw, ih);
+    }
+    return;
+  }
+  if(bg.type === 'template'){
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    if(bg.id === 'grid'){
+      for(let x = 0; x < w; x += 26){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for(let y = 0; y < h; y += 26){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    } else if(bg.id === 'lines'){
+      for(let y = 30; y < h; y += 30){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    } else if(bg.id === 'axes'){
+      for(let x = 0; x < w; x += 26){ ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for(let y = 0; y < h; y += 26){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      const cx = w / 2, cy = h / 2;
+      ctx.strokeStyle = '#1a1f2e'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, h - 10); ctx.lineTo(cx, 10); ctx.stroke();
+    }
+  }
+}
+
+function tbReplayResizeCanvas(){
+  const wrap = document.getElementById('tbReplayCanvasWrap');
+  const canvas = document.getElementById('tbReplayCanvas');
+  canvas.width = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+  tbRenderReplayFrame();
+}
+window.addEventListener('resize', () => {
+  const m = document.getElementById('tbReplayModal');
+  if(m && !m.classList.contains('hidden')) tbReplayResizeCanvas();
+});
+
+function tbRenderReplayFrame(){
+  const canvas = document.getElementById('tbReplayCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  tbDrawReplayBackground(ctx, w, h);
+  for(let i = 0; i < tbReplayIndex; i++) tbDrawStroke(ctx, tbReplayStrokes[i], w, h);
+  const current = tbReplayStrokes[tbReplayIndex];
+  if(current){
+    const partial = tbPartialStroke(current, tbReplayProgress);
+    if(partial) tbDrawStroke(ctx, partial, w, h);
+  }
+}
+
+function tbUpdateReplayUI(){
+  const total = tbReplayStrokes.length;
+  const shown = Math.min(tbReplayIndex, total);
+  document.getElementById('tbReplayCount').textContent = `${shown} / ${total}`;
+  document.getElementById('tbReplayElapsed').textContent = `Trait ${shown} / ${total}`;
+  document.getElementById('tbReplayScrub').value = shown;
+  document.getElementById('tbReplayPlayBtn').textContent = tbReplayPlaying ? '⏸️' : '▶️';
+  document.getElementById('tbReplaySpeedBtn').textContent = tbReplaySpeed + '×';
+}
+
+function tbReplayLoop(ts){
+  if(!tbReplayPlaying) return;
+  if(tbReplayLastTs === null) tbReplayLastTs = ts;
+  const dt = ts - tbReplayLastTs;
+  tbReplayLastTs = ts;
+
+  if(tbReplayWait > 0){
+    tbReplayWait -= dt;
+    if(tbReplayWait > 0){ tbReplayRaf = requestAnimationFrame(tbReplayLoop); return; }
+  }
+  const current = tbReplayStrokes[tbReplayIndex];
+  if(!current){ tbReplayPlaying = false; tbUpdateReplayUI(); return; }
+  const dur = tbStrokeDuration(current) / tbReplaySpeed;
+  tbReplayProgress += dt / dur;
+  if(tbReplayProgress >= 1){
+    tbReplayProgress = 0;
+    tbReplayIndex++;
+    tbReplayWait = (tbReplayGaps[tbReplayIndex] || 300) / tbReplaySpeed;
+    if(tbReplayIndex >= tbReplayStrokes.length){
+      tbReplayPlaying = false;
+      tbRenderReplayFrame();
+      tbUpdateReplayUI();
+      return;
+    }
+  }
+  tbRenderReplayFrame();
+  tbUpdateReplayUI();
+  tbReplayRaf = requestAnimationFrame(tbReplayLoop);
+}
+
+function tbReplayPlay(){
+  if(tbReplayIndex >= tbReplayStrokes.length){ tbReplayIndex = 0; tbReplayProgress = 0; }
+  tbReplayPlaying = true;
+  tbReplayLastTs = null;
+  tbUpdateReplayUI();
+  tbReplayRaf = requestAnimationFrame(tbReplayLoop);
+}
+function tbReplayPause(){
+  tbReplayPlaying = false;
+  if(tbReplayRaf) cancelAnimationFrame(tbReplayRaf);
+  tbUpdateReplayUI();
+}
+
+function openTbReplay(strokesArr, backgroundObj, titleLabel){
+  const strokes = strokesArr || tbStrokes;
+  if(!strokes.length){ tbShowToast('Rien à rejouer pour le moment sur ce tableau.'); return; }
+  tbReplayStrokes = strokes.slice();
+  tbReplayBg = backgroundObj !== undefined ? backgroundObj : (tbBoardData.background || null);
+  tbReplayBgImage = null; tbReplayBgImageKey = null;
+  document.getElementById('tbReplayTitle').textContent = titleLabel ? `🎬 ${titleLabel}` : '🎬 Replay de la correction';
+  tbReplayGaps = [0];
+  for(let i = 1; i < tbReplayStrokes.length; i++){
+    const t0 = tbTsMillis(tbReplayStrokes[i-1].at), t1 = tbTsMillis(tbReplayStrokes[i].at);
+    const gap = (t0 !== null && t1 !== null) ? (t1 - t0) : 400;
+    tbReplayGaps.push(Math.min(2200, Math.max(200, gap)));
+  }
+  tbReplayIndex = 0; tbReplayProgress = 0; tbReplayWait = 0; tbReplaySpeed = 1; tbReplayPlaying = false;
+  document.getElementById('tbReplayScrub').max = tbReplayStrokes.length;
+  document.getElementById('tbReplayModal').classList.remove('hidden');
+  requestAnimationFrame(tbReplayResizeCanvas);
+  tbUpdateReplayUI();
+}
+
+function closeTbReplay(){
+  tbReplayPause();
+  document.getElementById('tbReplayModal').classList.add('hidden');
+}
+
+// ── ENREGISTREMENT & BIBLIOTHÈQUE ──
+function tbOpenSavePanel(){
+  if(tbRole !== 'admin'){ tbShowToast('Seul le professeur peut enregistrer dans la bibliothèque.'); return; }
+  if(!tbStrokes.length){ tbShowToast('Le tableau est vide, rien à enregistrer.'); return; }
+  tbClosePanels();
+  const wrap = document.createElement('div');
+  wrap.className = 'tb-overlay-modal';
+  wrap.innerHTML = `<div class="tb-panel">
+    <button class="tb-panel-close" id="tbSaveClose">✕</button>
+    <h3>💾 Enregistrer dans la bibliothèque</h3>
+    <input type="text" class="tb-save-input" id="tbSaveTitle" placeholder="Ex : Dérivées — exercice 3" maxlength="60">
+    <label class="tb-save-check"><input type="checkbox" id="tbSaveClearAfter"> Vider le tableau après l'enregistrement</label>
+    <div class="tb-save-actions">
+      <button class="tb-save-cancel" id="tbSaveCancel">Annuler</button>
+      <button class="tb-save-confirm" id="tbSaveConfirm">Enregistrer</button>
+    </div>
+  </div>`;
+  document.body.appendChild(wrap);
+  wrap.onclick = e => { if(e.target === wrap) wrap.remove(); };
+  document.getElementById('tbSaveClose').onclick = () => wrap.remove();
+  document.getElementById('tbSaveCancel').onclick = () => wrap.remove();
+  const input = document.getElementById('tbSaveTitle');
+  setTimeout(() => input.focus(), 50);
+  document.getElementById('tbSaveConfirm').onclick = async () => {
+    const titre = input.value.trim() || `Tableau du ${new Date().toLocaleDateString('fr-FR')}`;
+    const clearAfter = document.getElementById('tbSaveClearAfter').checked;
+    wrap.remove();
+    await tbSaveArchive(titre, clearAfter);
+  };
+}
+
+async function tbSaveArchive(titre, clearAfter){
+  try {
+    const snap = await getDocs(query(collection(db, TB_COL, tbToken, 'traits'), orderBy('at', 'asc')));
+    const archiveRef = await addDoc(collection(db, TB_COL, tbToken, 'archives'), {
+      titre, createdAt: serverTimestamp(), createdBy: tbRole,
+      background: tbBoardData.background || null, strokesCount: snap.docs.length
+    });
+    for(const d of snap.docs){
+      const data = d.data();
+      await addDoc(collection(db, TB_COL, tbToken, 'archives', archiveRef.id, 'traits'), data);
+    }
+    tbShowToast(`✅ Enregistré sous « ${titre} »`);
+    if(clearAfter){
+      for(const d of snap.docs) await deleteDoc(d.ref);
+      await setDoc(doc(db, TB_COL, tbToken), { background: null }, { merge: true });
+    }
+  } catch(e){ tbShowToast("Erreur lors de l'enregistrement."); }
+}
+
+let tbUnsubLib = null;
+
+function openTbLibrary(){
+  document.getElementById('tbLibModal').classList.remove('hidden');
+  const listEl = document.getElementById('tbLibList');
+  listEl.innerHTML = '<div class="tb-lib-empty">Chargement…</div>';
+  if(tbUnsubLib) tbUnsubLib();
+  tbUnsubLib = onSnapshot(query(collection(db, TB_COL, tbToken, 'archives'), orderBy('createdAt', 'desc')), snap => {
+    if(snap.empty){
+      listEl.innerHTML = '<div class="tb-lib-empty">📭 Aucun tableau enregistré pour le moment.<br>Utilisez 💾 pendant une séance pour en garder une trace.</div>';
+      return;
+    }
+    listEl.innerHTML = snap.docs.map(d => {
+      const a = d.data();
+      const date = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' }) : '—';
+      const who = a.createdBy === 'admin' ? 'Professeur' : (tbOtherName || 'Élève');
+      return `<div class="tb-lib-item" data-id="${d.id}">
+        <div class="tb-lib-ico">🖊️</div>
+        <div class="tb-lib-mid">
+          <div class="tb-lib-name">${esc(a.titre || 'Sans titre')}</div>
+          <div class="tb-lib-meta">${esc(date)} · ${a.strokesCount || 0} traits · ${esc(who)}</div>
+        </div>
+        ${tbRole === 'admin' ? `<button class="tb-lib-del" data-del="${d.id}" title="Supprimer">🗑</button>` : ''}
+      </div>`;
+    }).join('');
+    listEl.querySelectorAll('.tb-lib-item').forEach(el => {
+      el.onclick = async (e) => {
+        if(e.target.closest('.tb-lib-del')) return;
+        await tbOpenArchiveReplay(el.dataset.id);
+      };
+    });
+    listEl.querySelectorAll('.tb-lib-del').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.stopPropagation();
+        if(!confirm('Supprimer ce tableau enregistré ? Cette action est irréversible.')) return;
+        const id = btn.dataset.del;
+        const traitsSnap = await getDocs(collection(db, TB_COL, tbToken, 'archives', id, 'traits'));
+        for(const t of traitsSnap.docs) await deleteDoc(t.ref);
+        await deleteDoc(doc(db, TB_COL, tbToken, 'archives', id));
+      };
+    });
+  });
+}
+
+function closeTbLibrary(){
+  if(tbUnsubLib){ tbUnsubLib(); tbUnsubLib = null; }
+  document.getElementById('tbLibModal').classList.add('hidden');
+}
+
+async function tbOpenArchiveReplay(archiveId){
+  try {
+    const archiveSnap = await getDoc(doc(db, TB_COL, tbToken, 'archives', archiveId));
+    if(!archiveSnap.exists()) return;
+    const archive = archiveSnap.data();
+    const traitsSnap = await getDocs(query(collection(db, TB_COL, tbToken, 'archives', archiveId, 'traits'), orderBy('at', 'asc')));
+    const strokes = traitsSnap.docs.map(d => d.data());
+    closeTbLibrary();
+    openTbReplay(strokes, archive.background || null, archive.titre);
+  } catch(e){ tbShowToast("Erreur lors du chargement du tableau."); }
+}
+
+(function initReplayControls(){
+  document.getElementById('tbReplayCloseBtn').onclick = closeTbReplay;
+  document.getElementById('tbReplayPlayBtn').onclick = () => { tbReplayPlaying ? tbReplayPause() : tbReplayPlay(); };
+  document.getElementById('tbReplaySpeedBtn').onclick = () => {
+    tbReplaySpeed = tbReplaySpeed === 1 ? 2 : (tbReplaySpeed === 2 ? 4 : 1);
+    tbUpdateReplayUI();
+  };
+  document.getElementById('tbReplayScrub').addEventListener('input', e => {
+    tbReplayPause();
+    tbReplayIndex = Number(e.target.value);
+    tbReplayProgress = 0;
+    tbReplayWait = 0;
+    tbRenderReplayFrame();
+    tbUpdateReplayUI();
+  });
+})();
+
+// ── Câblage des contrôles (une seule fois) ──
+(function initTableauControls(){
+  const colorsWrap = document.getElementById('tbColors');
+  colorsWrap.innerHTML = TB_COLORS.map((c, i) => `<div class="tb-swatch ${i===0?'active':''}" data-c="${c}" style="background:${c}"></div>`).join('');
+  colorsWrap.querySelectorAll('.tb-swatch').forEach(el => {
+    el.onclick = () => { tbColor = el.dataset.c; colorsWrap.querySelectorAll('.tb-swatch').forEach(s => s.classList.toggle('active', s === el)); };
+  });
+  document.getElementById('tbSizes').querySelectorAll('.tb-size-btn').forEach(el => {
+    el.onclick = () => { tbSize = Number(el.dataset.size); document.getElementById('tbSizes').querySelectorAll('.tb-size-btn').forEach(s => s.classList.toggle('active', s === el)); };
+  });
+  document.querySelectorAll('.tb-tool-btn[data-tool]').forEach(el => {
+    el.onclick = () => { tbTool = el.dataset.tool; document.querySelectorAll('.tb-tool-btn[data-tool]').forEach(s => s.classList.toggle('active', s === el)); };
+  });
+
+  const wrap = document.getElementById('tbCanvasWrap');
+  wrap.addEventListener('pointerdown', tbPointerDown);
+  wrap.addEventListener('pointermove', tbPointerMove);
+  wrap.addEventListener('pointerup', tbPointerUp);
+  wrap.addEventListener('pointercancel', tbPointerUp);
+
+  document.getElementById('tbBackBtn').onclick = closeTableau;
+  document.getElementById('tbReplayBtn').onclick = () => openTbReplay();
+  document.getElementById('tbSaveBtn').onclick = tbOpenSavePanel;
+  document.getElementById('tbLibBtn').onclick = openTbLibrary;
+  document.getElementById('tbLibCloseBtn').onclick = closeTbLibrary;
+  document.getElementById('tbUndoBtn').onclick = tbUndo;
+  document.getElementById('tbBgBtn').onclick = tbOpenBgPanel;
+  document.getElementById('tbImportBtn').onclick = () => document.getElementById('tbImportInput').click();
+  document.getElementById('tbPasteBtn').onclick = tbPasteFromClipboard;
+  wrap.addEventListener('dragover', e => { e.preventDefault(); wrap.classList.add('dragover'); });
+  wrap.addEventListener('dragleave', () => wrap.classList.remove('dragover'));
+  wrap.addEventListener('drop', e => {
+    e.preventDefault();
+    wrap.classList.remove('dragover');
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(file && file.type.startsWith('image/')) tbSetBackgroundFromBlob(file);
+  });
+  document.getElementById('tbTimerBtn').onclick = tbOpenTimerPanel;
+  document.getElementById('tbExportBtn').onclick = tbExportToChat;
+  document.getElementById('tbMenuBtn').onclick = () => tbShowToast('✏️ Stylo · 🧹 Gomme · 📏 Ligne · ▭ Rectangle · ⭕ Cercle · ↗ Flèche · 🔤 Texte');
+  document.getElementById('tbRaiseBtn').onclick = async () => {
+    await setDoc(doc(db, TB_COL, tbToken), { handRaise: true }, { merge: true });
+    tbShowToast('✋ Demande envoyée au professeur');
+  };
+  document.getElementById('tbLockBtn').onclick = async () => {
+    if(tbRole !== 'admin') return;
+    const newLocked = tbBoardData.locked === 'admin' ? null : 'admin';
+    await setDoc(doc(db, TB_COL, tbToken), { locked: newLocked, handRaise: false }, { merge: true });
+  };
+  document.getElementById('tbClearBtn').onclick = async () => {
+    if(tbRole !== 'admin'){ tbShowToast('Seul le professeur peut tout effacer.'); return; }
+    if(!confirm('Effacer tout le tableau ? Cette action est irréversible.')) return;
+    const snap = await getDocs(collection(db, TB_COL, tbToken, 'traits'));
+    for(const d of snap.docs) await deleteDoc(d.ref);
+    await setDoc(doc(db, TB_COL, tbToken), { background: null }, { merge: true });
+  };
+  document.getElementById('tbImportInput').onchange = async () => {
+    const inp = document.getElementById('tbImportInput');
+    const file = inp.files[0];
+    inp.value = '';
+    if(!file) return;
+    try {
+      const dataUrl = await fileToDataURL(file);
+      await setDoc(doc(db, TB_COL, tbToken), { background: { type: 'image', data: dataUrl } }, { merge: true });
+    } catch(e){ tbShowToast(e.message || "Erreur lors de l'import de l'image."); }
+  };
+})();
 
 // ═══════════════════════════════════════════════════════════════
 // PWA — INSTALLATION & SERVICE WORKER
