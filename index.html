@@ -365,6 +365,88 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
 
 .spin{width:26px;height:26px;border:3px solid #e2e8f0;border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:auto}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── SUIVI DES MATIÈRES (élève + professeur) ── */
+.tab-dot{display:inline-flex;align-items:center;justify-content:center;background:#ef4444;color:#fff;font-size:9.5px;font-weight:800;border-radius:20px;min-width:16px;height:16px;padding:0 4px;margin-left:5px;vertical-align:middle}
+.tab-dot.hidden{display:none}
+.hdr-btn{position:relative}
+.hdr-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:9.5px;font-weight:800;border-radius:20px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #1a1f2e}
+.hdr-badge.hidden{display:none}
+.sv-wrap{padding:2px 0 24px}
+.sv-hero{background:linear-gradient(135deg,#1a1f2e,var(--accent-dark));border-radius:16px;padding:16px;color:#fff;margin-bottom:14px}
+.sv-hero-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sv-hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;opacity:.9}
+.sv-hero-num{font-family:'DM Mono',monospace;font-weight:500;font-size:30px;line-height:1}
+.sv-hero-num small{font-size:14px;opacity:.65}
+.sv-bar{background:rgba(148,163,184,.25);border-radius:20px;height:8px;overflow:hidden;display:flex}
+.sv-bar-ok{background:#22c55e;height:100%;transition:width .5s ease}
+.sv-bar-wait{background:#f59e0b;height:100%;transition:width .5s ease}
+.sv-bar.light{background:#e2e8f0;height:6px}
+.sv-hero-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;margin-top:9px;opacity:.92}
+.sv-mat{background:#fff;border-radius:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
+.sv-mat-h{display:flex;align-items:center;gap:11px;padding:12px;cursor:pointer;width:100%;background:none;border:none;text-align:left;font-family:inherit}
+.sv-mat-ico{width:38px;height:38px;border-radius:11px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sv-mat-mid{flex:1;min-width:0}
+.sv-mat-nom{font-family:'Syne',sans-serif;font-weight:800;font-size:13.5px;color:#1a1f2e}
+.sv-mat-cnt{font-size:11px;color:#64748b;margin:2px 0 6px}
+.sv-chev{color:#94a3b8;font-size:13px;transition:transform .2s;flex-shrink:0}
+.sv-mat.open .sv-chev{transform:rotate(90deg)}
+.sv-mat-body{display:none;padding:0 12px 10px}
+.sv-mat.open .sv-mat-body{display:block}
+.sv-chap{margin-top:8px}
+.sv-chap-t{font-size:11.5px;font-weight:800;color:#475569;padding:6px 2px;display:flex;justify-content:space-between;gap:8px}
+.sv-chap-t span{font-weight:600;color:#94a3b8;flex-shrink:0}
+.sv-row{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:11px;background:#f8fafc;margin-bottom:5px;border:1.5px solid transparent}
+.sv-row.st-valide{background:#f0fdf4;border-color:#bbf7d0}
+.sv-row.st-attente{background:#fffbeb;border-color:#fde68a}
+.sv-row.st-revoir{background:#fff7ed;border-color:#fdba74}
+.sv-row.is-new{box-shadow:0 0 0 3px rgba(99,102,241,.25)}
+.sv-check{width:30px;height:30px;border-radius:9px;border:2px solid #cbd5e1;background:#fff;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;font-family:inherit;padding:0}
+.sv-check:active{transform:scale(.92)}
+.sv-check:focus-visible,.sv-act:focus-visible,.sv-mat-h:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.st-attente .sv-check{background:#f59e0b;border-color:#f59e0b}
+.st-valide .sv-check{background:#16a34a;border-color:#16a34a;cursor:default}
+.st-revoir .sv-check{background:#ea580c;border-color:#ea580c}
+.sv-txt{flex:1;min-width:0}
+.sv-t{font-size:13px;font-weight:600;color:#1a1f2e;line-height:1.35}
+.sv-s{font-size:11px;color:#64748b;margin-top:2px;line-height:1.35}
+.st-valide .sv-s{color:#15803d}
+.st-attente .sv-s{color:#b45309}
+.st-revoir .sv-s{color:#c2410c;font-weight:600}
+.sv-toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:92vw;width:max-content;background:#1a1f2e;color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:120;line-height:1.35;text-align:center}
+.sv-toast.hidden{display:none}
+.sv-note-in{width:100%;min-height:76px;padding:10px 12px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;resize:vertical}
+.sv-note-in:focus{border-color:var(--accent)}
+/* admin */
+.sv-group{background:#fff;border-radius:14px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sv-group-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sv-group-h .eleve-av{width:34px;height:34px;font-size:13px;border-radius:10px}
+.sv-group-nom{flex:1;min-width:0;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#1a1f2e}
+.sv-all{background:#dcfce7;color:#166534;border:none;border-radius:9px;padding:6px 10px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0}
+.sv-acts{display:flex;gap:6px;flex-shrink:0}
+.sv-act{width:34px;height:34px;border-radius:10px;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0}
+.sv-act.ok{background:#dcfce7;color:#166534}
+.sv-act.redo{background:#ffedd5;color:#9a3412}
+.sv-act.reset{background:#f1f5f9;color:#64748b}
+.sv-act.on{box-shadow:inset 0 0 0 2px currentColor}
+.sv-empty{text-align:center;color:#94a3b8;font-size:12.5px;padding:40px 20px;line-height:1.5}
+.sv-empty span{font-size:32px;display:block;margin-bottom:8px}
+.sv-hint{font-size:11.5px;color:#64748b;line-height:1.5;margin:2px 2px 12px}
+.sv-mini{display:flex;gap:10px;font-size:11px;color:#64748b;margin-top:5px;flex-wrap:wrap}
+.sp-mat{background:#fff;border-radius:14px;padding:12px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sp-mat-h,.sp-chap-h{display:flex;gap:7px;align-items:center;margin-bottom:8px}
+.sp-in{flex:1;min-width:0;padding:9px 11px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:#fff}
+.sp-in:focus{border-color:var(--accent)}
+.sp-ico{flex:0 0 48px;text-align:center;font-size:17px;padding:6px}
+.sp-nom{font-weight:700}
+.sp-del{width:34px;height:34px;flex-shrink:0;border:none;border-radius:10px;background:#fef2f2;color:#dc2626;cursor:pointer;font-size:14px;font-family:inherit}
+.sp-chap{background:#f8fafc;border-radius:11px;padding:9px;margin-bottom:8px}
+.sp-parts{width:100%;min-height:64px;resize:vertical}
+.sp-add{background:#eef2ff;color:#4338ca;border:none;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.sp-add.full{width:100%;padding:12px}
+.sp-savebar{padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #e2e8f0;flex-shrink:0}
+.sp-copy{width:100%;padding:9px 11px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:12.5px;font-family:'DM Sans',sans-serif;background:#fff;margin-bottom:12px;color:#475569}
+@media (prefers-reduced-motion:reduce){.sv-bar-ok,.sv-bar-wait,.sv-chev{transition:none}}
 </style>
 </head>
 <body>
@@ -404,6 +486,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
     <button class="tab-btn active" id="tabPrivate" data-tab="private">💬 Le professeur</button>
     <button class="tab-btn" id="tabGroup" data-tab="group">👥 Groupe classe</button>
     <button class="tab-btn" id="tabDevoirs" data-tab="devoirs">📚 Devoirs</button>
+    <button class="tab-btn" id="tabSuivi" data-tab="suivi">✅ Mon suivi<span class="tab-dot hidden" id="tabSuiviDot"></span></button>
     <button class="tab-btn" id="tabEdt" data-tab="edt">🗓️ Emploi du temps</button>
     <button class="tab-btn" id="tabProg" data-tab="prog">🎯 Ma progression</button>
     <button class="tab-btn" id="tabSondages" data-tab="sondages">📊 Sondages</button>
@@ -412,6 +495,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
   <div id="studentWelcomeBanner" class="welcome-banner hidden"></div>
   <div class="msgs" id="studentMsgs"></div>
   <div class="msgs hidden" id="studentDevoirsView"></div>
+  <div class="msgs hidden" id="studentSuiviView"></div>
   <div class="msgs hidden" id="studentEdtView"></div>
   <div class="msgs hidden" id="studentProgView"></div>
   <div class="msgs hidden" id="studentSondagesView"></div>
@@ -455,6 +539,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
       <div class="hdr-title">Messagerie élèves</div>
       <div class="hdr-sub">Club Réussir Ensemble</div>
     </div>
+    <button class="hdr-btn" id="adminSuiviBtn" title="Suivi des matières" aria-label="Suivi des matières">✅<span class="hdr-badge hidden" id="adminSuiviBadge"></span></button>
     <button class="hdr-btn" id="adminActusBtn" title="Actualités">📰</button>
     <button class="hdr-btn" id="adminSondagesBtn" title="Sondages">📊</button>
     <button class="hdr-btn" id="adminBacDateBtn" title="Date du Bac">🎓</button>
@@ -480,6 +565,7 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
     <button class="hdr-btn" id="adminLinkEdtBtn" title="Lier à une classe (Emploi du temps)">🗓️</button>
     <button class="hdr-btn" id="adminEdtManualBtn" title="Ajouter/modifier son emploi du temps">📅</button>
     <button class="hdr-btn" id="adminProgManualBtn" title="Ajouter/modifier ses notes et présences">🎯</button>
+    <button class="hdr-btn" id="adminSuiviEleveBtn" title="Suivi des matières de cet élève" aria-label="Suivi des matières de cet élève">✅</button>
     <button class="hdr-btn" id="adminDeleteBtn" title="Supprimer la conversation">🗑</button>
   </div>
   <div class="msgs" id="adminMsgs"></div>
@@ -855,6 +941,64 @@ body{background:#f0f4f8;font-family:'DM Sans',sans-serif;overflow:hidden}
   <button id="installClose">✕</button>
 </div>
 
+<!-- ══ SUIVI DES MATIÈRES : ADMIN ══ -->
+<div id="adminSuivi" class="screen hidden">
+  <div class="hdr">
+    <button class="hdr-btn" id="suiviBackBtn" aria-label="Retour">←</button>
+    <div class="hdr-avatar">✅</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Suivi des matières</div>
+      <div class="hdr-sub" id="suiviAdminSub">Validation en temps réel</div>
+    </div>
+  </div>
+  <div class="chat-tabs">
+    <button class="tab-btn active" id="svTabValider" data-sv="valider">À valider</button>
+    <button class="tab-btn" id="svTabEleves" data-sv="eleves">Élèves</button>
+    <button class="tab-btn" id="svTabProg" data-sv="prog">Programmes</button>
+  </div>
+  <div class="eleve-list" id="suiviAdminBody" style="padding-top:12px"></div>
+</div>
+
+<div id="adminSuiviEleve" class="screen hidden">
+  <div class="hdr">
+    <button class="hdr-btn" id="suiviEleveBackBtn" aria-label="Retour">←</button>
+    <div class="hdr-avatar" id="suiviEleveAv">👤</div>
+    <div class="hdr-info">
+      <div class="hdr-title" id="suiviEleveNom">—</div>
+      <div class="hdr-sub" id="suiviEleveSub">—</div>
+    </div>
+  </div>
+  <div class="eleve-list" id="suiviEleveBody" style="padding-top:12px"></div>
+</div>
+
+<div id="adminSuiviProg" class="screen hidden">
+  <div class="hdr">
+    <button class="hdr-btn" id="spBackBtn" aria-label="Retour">←</button>
+    <div class="hdr-avatar">🗂️</div>
+    <div class="hdr-info">
+      <div class="hdr-title">Programme à suivre</div>
+      <div class="hdr-sub" id="spSub">—</div>
+    </div>
+  </div>
+  <div class="eleve-list" id="spBody" style="padding-top:12px"></div>
+  <div class="sp-savebar"><button class="btn btn-primary" id="spSaveBtn" style="width:100%">💾 Enregistrer le programme</button></div>
+</div>
+
+<div id="suiviNoteModal" class="modal-bg hidden">
+  <div class="modal-box">
+    <h2>🔁 Partie à revoir</h2>
+    <div id="suiviNoteCtx" style="font-size:12px;color:#64748b;margin-bottom:8px"></div>
+    <label for="suiviNoteIn">Commentaire pour l'élève (facultatif)</label>
+    <textarea id="suiviNoteIn" class="sv-note-in" placeholder="Ex : Reprends la partie sur l'offre et la demande, puis recoche-la."></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="suiviNoteCancel">Annuler</button>
+      <button class="btn btn-primary" id="suiviNoteOk">Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<div id="suiviToast" class="sv-toast hidden" role="status" aria-live="polite"></div>
+
 <input type="file" id="fileInputStudent" class="hidden" accept="image/*,application/pdf">
 <input type="file" id="fileInputAdmin" class="hidden" accept="image/*,application/pdf">
 
@@ -909,6 +1053,18 @@ const EVALS_COL = 'edtx_evals';
 const DOCUMENTS_COL = 'edtx_documents';
 const MODULES_COL = 'edtx_modules';
 const ADMIN_PASSWORD = 'BHDS123';
+const SUIVI_COL = 'chatSuivi';            // chatSuivi/{token élève} → { items: { [partieId]: { etat, coche, valide, note, maj } } }
+const SUIVI_PROG_COL = 'chatSuiviProg';   // chatSuiviProg/{clé de classe} → { classe, matieres:[{id,nom,ico,chapitres:[{id,titre,parties:[{id,titre}]}]}] }
+// — état côté élève
+const suiviLoaded = { prog:false, data:false, err:false };
+let suiviProg = null, suiviData = null, suiviPrevEtats = null, suiviUnsubs = [];
+let suiviOpenInit = false, suiviSeenAtOpen = 0, suiviToastTimer = null;
+const suiviOpen = new Set();
+// — état côté professeur
+let allSuivi = {}, allSuiviProgs = {}, suiviAdminUnsubs = [], suiviAdminReady = false;
+let suiviAdminTab = 'valider', suiviDetailToken = null, suiviDetailBack = 'adminSuivi', suiviAdminWarned = false;
+const suiviAdminOpen = new Set();
+let spDraft = null, spClasseKey = '', spClasseLabel = '', spDirty = false;
 const MAX_B64_LEN = 800000; // ~600 Ko de fichier brut, marge sous la limite Firestore de 1 Mo/document
 
 // ═══════════════════════════════════════════════════════════════
@@ -1202,11 +1358,13 @@ async function initStudent(token){
   document.getElementById('tabPrivate').onclick = () => switchStudentTab('private');
   document.getElementById('tabGroup').onclick = () => switchStudentTab('group');
   document.getElementById('tabDevoirs').onclick = () => switchStudentTab('devoirs');
+  document.getElementById('tabSuivi').onclick = () => switchStudentTab('suivi');
   document.getElementById('tabEdt').onclick = () => switchStudentTab('edt');
   document.getElementById('tabProg').onclick = () => switchStudentTab('prog');
   document.getElementById('tabSondages').onclick = () => switchStudentTab('sondages');
   document.getElementById('tabActus').onclick = () => switchStudentTab('actus');
 
+  suiviStartStudent();
   studentSubscribe();
 }
 
@@ -1216,6 +1374,7 @@ function switchStudentTab(mode){
   document.getElementById('tabPrivate').classList.toggle('active', mode === 'private');
   document.getElementById('tabGroup').classList.toggle('active', mode === 'group');
   document.getElementById('tabDevoirs').classList.toggle('active', mode === 'devoirs');
+  document.getElementById('tabSuivi').classList.toggle('active', mode === 'suivi');
   document.getElementById('tabEdt').classList.toggle('active', mode === 'edt');
   document.getElementById('tabProg').classList.toggle('active', mode === 'prog');
   document.getElementById('tabSondages').classList.toggle('active', mode === 'sondages');
@@ -1228,6 +1387,7 @@ function switchStudentTab(mode){
   document.getElementById('studentMsgs').classList.toggle('hidden', !showChat);
   document.getElementById('studentToolbar').classList.toggle('hidden', !showChat);
   document.getElementById('studentDevoirsView').classList.toggle('hidden', mode !== 'devoirs');
+  document.getElementById('studentSuiviView').classList.toggle('hidden', mode !== 'suivi');
   document.getElementById('studentEdtView').classList.toggle('hidden', mode !== 'edt');
   document.getElementById('studentProgView').classList.toggle('hidden', mode !== 'prog');
   document.getElementById('studentSondagesView').classList.toggle('hidden', mode !== 'sondages');
@@ -1315,6 +1475,8 @@ function studentSubscribe(){
       state.modules = snap.docs.map(d => d.data()); rerender();
     }, () => {});
     studentUnsub = () => { u1(); u2(); u3(); u4(); };
+  } else if(studentMode === 'suivi'){
+    suiviOnOpen();
   } else if(studentMode === 'sondages'){
     studentUnsub = onSnapshot(query(collection(db, SONDAGES_COL), orderBy('createdAt','desc')), snap => {
       const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.actif);
@@ -1325,6 +1487,632 @@ function studentSubscribe(){
       const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       renderStudentActus(list);
     });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUIVI DES MATIÈRES — outils communs
+// ═══════════════════════════════════════════════════════════════
+function suiviClasseKey(c){
+  const k = (c || '').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return k || 'general';
+}
+function suiviUid(p){ return (p || 'x') + Date.now().toString(36).slice(-4) + Math.random().toString(36).slice(2, 6); }
+
+// Liste à plat de tout ce qui se coche : les parties, ou le chapitre lui-même s'il n'a pas de parties.
+function suiviLeaves(prog){
+  const out = [];
+  ((prog && prog.matieres) || []).forEach(m => (m.chapitres || []).forEach(c => {
+    const parts = c.parties || [];
+    if(parts.length) parts.forEach(p => out.push({ id: p.id, titre: p.titre, chap: c.titre, mat: m.nom, ico: m.ico }));
+    else out.push({ id: c.id, titre: c.titre, chap: c.titre, mat: m.nom, ico: m.ico, solo: true });
+  }));
+  return out;
+}
+function suiviCount(prog, items){
+  const c = { total: 0, valide: 0, attente: 0, revoir: 0 };
+  suiviLeaves(prog).forEach(l => {
+    c.total++;
+    const e = items && items[l.id] && items[l.id].etat;
+    if(e === 'valide') c.valide++; else if(e === 'attente') c.attente++; else if(e === 'revoir') c.revoir++;
+  });
+  return c;
+}
+function suiviBarHtml(c, light){
+  const t = c.total || 1;
+  return `<div class="sv-bar ${light ? 'light' : ''}" role="img" aria-label="${c.valide} validées sur ${c.total}"><div class="sv-bar-ok" style="width:${(c.valide / t * 100).toFixed(1)}%"></div><div class="sv-bar-wait" style="width:${(c.attente / t * 100).toFixed(1)}%"></div></div>`;
+}
+function suiviFmtDate(ms){ return new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }); }
+function suiviAgo(ms){
+  if(!ms) return '';
+  const m = Math.round((Date.now() - ms) / 60000);
+  if(m < 1) return "à l'instant";
+  if(m < 60) return 'il y a ' + m + ' min';
+  const h = Math.round(m / 60);
+  if(h < 24) return 'il y a ' + h + ' h';
+  return 'il y a ' + Math.round(h / 24) + ' j';
+}
+function suiviToast(msg){
+  const el = document.getElementById('suiviToast');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(suiviToastTimer);
+  suiviToastTimer = setTimeout(() => el.classList.add('hidden'), 4500);
+}
+function suiviStatusText(it){
+  const e = it.etat || 'afaire';
+  if(e === 'attente') return 'En attente de validation' + (it.coche ? ' · ' + suiviAgo(it.coche) : '');
+  if(e === 'valide') return 'Validé' + (it.valide ? ' le ' + suiviFmtDate(it.valide) : '');
+  if(e === 'revoir') return it.note ? 'À revoir : ' + it.note : 'À revoir';
+  return '';
+}
+
+// Construit les cartes « matière → chapitres → lignes ». rowFn dessine une ligne.
+function suiviMatieresHtml(prog, items, openSet, rowFn){
+  return (prog.matieres || []).map(m => {
+    const c = suiviCount({ matieres: [m] }, items);
+    const isOpen = openSet.has(m.id);
+    const chaps = (m.chapitres || []).map(ch => {
+      const parts = ch.parties || [];
+      if(!parts.length) return `<div class="sv-chap">${rowFn({ id: ch.id, titre: ch.titre }, items[ch.id] || {})}</div>`;
+      const done = parts.filter(p => items[p.id] && items[p.id].etat === 'valide').length;
+      return `<div class="sv-chap"><div class="sv-chap-t">${esc(ch.titre)}<span>${done}/${parts.length}</span></div>${parts.map(p => rowFn(p, items[p.id] || {})).join('')}</div>`;
+    }).join('') || '<div class="sv-hint">Aucun chapitre pour cette matière.</div>';
+    return `<div class="sv-mat ${isOpen ? 'open' : ''}">
+      <button class="sv-mat-h" data-mat="${esc(m.id)}" aria-expanded="${isOpen}">
+        <div class="sv-mat-ico">${esc(m.ico || '📘')}</div>
+        <div class="sv-mat-mid">
+          <div class="sv-mat-nom">${esc(m.nom)}</div>
+          <div class="sv-mat-cnt">${c.valide}/${c.total} validées${c.attente ? ' · ' + c.attente + ' en attente' : ''}${c.revoir ? ' · ' + c.revoir + ' à revoir' : ''}</div>
+          ${suiviBarHtml(c, true)}
+        </div>
+        <span class="sv-chev" aria-hidden="true">▶</span>
+      </button>
+      <div class="sv-mat-body">${chaps}</div>
+    </div>`;
+  }).join('');
+}
+function suiviHeroHtml(title, c){
+  const pct = c.total ? Math.round(c.valide / c.total * 100) : 0;
+  return `<div class="sv-hero">
+    <div class="sv-hero-top"><div class="sv-hero-title">${esc(title)}</div><div class="sv-hero-num">${c.valide}<small>/${c.total}</small></div></div>
+    ${suiviBarHtml(c, false)}
+    <div class="sv-hero-legend"><span>✅ ${pct}% validé</span>${c.attente ? `<span>⏳ ${c.attente} en attente</span>` : ''}${c.revoir ? `<span>🔁 ${c.revoir} à revoir</span>` : ''}</div>
+  </div>`;
+}
+function suiviToggleMat(h, openSet){
+  const card = h.parentElement, id = h.dataset.mat;
+  card.classList.toggle('open');
+  const open = card.classList.contains('open');
+  h.setAttribute('aria-expanded', open);
+  if(open) openSet.add(id); else openSet.delete(id);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUIVI DES MATIÈRES — CÔTÉ ÉLÈVE
+// ═══════════════════════════════════════════════════════════════
+function suiviStartStudent(){
+  suiviUnsubs.forEach(u => u());
+  suiviUnsubs = [];
+  suiviPrevEtats = null;
+  const view = document.getElementById('studentSuiviView');
+  view.onclick = e => {
+    const chk = e.target.closest('.sv-check');
+    if(chk){ studentSuiviToggle(chk.dataset.id); return; }
+    const h = e.target.closest('.sv-mat-h');
+    if(h) suiviToggleMat(h, suiviOpen);
+  };
+  const fail = () => { suiviLoaded.err = true; suiviLoaded.prog = true; suiviLoaded.data = true; suiviAfterUpdate(); };
+  suiviUnsubs.push(onSnapshot(doc(db, SUIVI_PROG_COL, suiviClasseKey(studentClasse)), snap => {
+    suiviProg = snap.exists() ? snap.data() : null;
+    suiviLoaded.prog = true;
+    suiviAfterUpdate();
+  }, fail));
+  suiviUnsubs.push(onSnapshot(doc(db, SUIVI_COL, studentToken), snap => {
+    const data = snap.exists() ? snap.data() : { items: {} };
+    const items = data.items || {};
+    // Changement fait par le professeur pendant que l'élève est connecté → notification en direct
+    if(suiviPrevEtats && !snap.metadata.hasPendingWrites){
+      Object.keys(items).forEach(id => {
+        const e = items[id].etat;
+        if(e !== suiviPrevEtats[id] && (e === 'valide' || e === 'revoir')) suiviNotifyStudent(id, e);
+      });
+    }
+    suiviPrevEtats = {};
+    Object.keys(items).forEach(id => suiviPrevEtats[id] = items[id].etat);
+    suiviData = data;
+    suiviLoaded.data = true;
+    suiviAfterUpdate();
+  }, fail));
+}
+function suiviNotifyStudent(id, etat){
+  const leaf = suiviLeaves(suiviProg).find(l => l.id === id);
+  if(!leaf) return;
+  suiviToast((etat === 'valide' ? '✅ Validé : ' : '🔁 À revoir : ') + leaf.mat + ' › ' + leaf.titre);
+  if(navigator.vibrate) try { navigator.vibrate(120); } catch(e){}
+}
+function suiviReviewedItems(){
+  const items = (suiviData && suiviData.items) || {};
+  const ids = new Set(suiviLeaves(suiviProg).map(l => l.id));
+  return Object.keys(items).filter(id => ids.has(id) && (items[id].etat === 'valide' || items[id].etat === 'revoir')).map(id => ({ id, maj: items[id].maj || 0 }));
+}
+function suiviSeenKey(){ return 'bhdsSuiviSeen_' + studentToken; }
+function suiviMarkSeen(){
+  const max = suiviReviewedItems().reduce((a, x) => Math.max(a, x.maj), 0);
+  if(max) try { localStorage.setItem(suiviSeenKey(), String(max)); } catch(e){}
+}
+function suiviUpdateDot(){
+  const dot = document.getElementById('tabSuiviDot');
+  if(!dot) return;
+  const seen = Number(localStorage.getItem(suiviSeenKey())) || 0;
+  const n = suiviReviewedItems().filter(x => x.maj > seen).length;
+  dot.textContent = n > 9 ? '9+' : String(n);
+  dot.classList.toggle('hidden', n === 0 || studentMode === 'suivi');
+}
+function suiviAfterUpdate(){
+  if(studentMode === 'suivi'){ renderStudentSuivi(); suiviMarkSeen(); }
+  suiviUpdateDot();
+}
+function suiviOnOpen(){
+  suiviSeenAtOpen = Number(localStorage.getItem(suiviSeenKey())) || 0;
+  renderStudentSuivi();
+  suiviMarkSeen();
+  suiviUpdateDot();
+}
+
+function renderStudentSuivi(){
+  const el = document.getElementById('studentSuiviView');
+  if(!suiviLoaded.prog || !suiviLoaded.data){
+    el.innerHTML = '<div class="sv-empty"><span>⏳</span>Chargement de ton suivi…</div>';
+    return;
+  }
+  if(suiviLoaded.err){
+    el.innerHTML = '<div class="sv-empty"><span>⚠️</span>Le suivi est momentanément indisponible.<br>Réessaie dans un instant.</div>';
+    return;
+  }
+  if(!suiviProg || !suiviLeaves(suiviProg).length){
+    el.innerHTML = `<div class="sv-empty"><span>✅</span>Ton professeur n'a pas encore défini le programme à suivre${studentClasse ? ' pour ' + esc(studentClasse) : ''}.<br>Il apparaîtra ici dès qu'il sera prêt.</div>`;
+    return;
+  }
+  const items = (suiviData && suiviData.items) || {};
+  if(!suiviOpenInit){
+    suiviOpenInit = true;
+    const first = (suiviProg.matieres || [])[0];
+    if(first) suiviOpen.add(first.id);
+  }
+  const newIds = new Set(suiviReviewedItems().filter(x => x.maj > suiviSeenAtOpen).map(x => x.id));
+  const row = (p, it) => {
+    const e = it.etat || 'afaire';
+    const glyph = e === 'valide' ? '✓' : e === 'attente' ? '⏳' : e === 'revoir' ? '↻' : '';
+    const label = e === 'valide' ? 'Validé par le professeur' : e === 'attente' ? "Annuler : en attente de validation" : e === 'revoir' ? 'À revoir : recocher quand c\'est fait' : 'Cocher : je l\'ai terminé';
+    const sub = suiviStatusText(it);
+    return `<div class="sv-row st-${e} ${newIds.has(p.id) ? 'is-new' : ''}">
+      <button class="sv-check" data-id="${esc(p.id)}" aria-label="${esc(p.titre + ' — ' + label)}">${glyph}</button>
+      <div class="sv-txt"><div class="sv-t">${esc(p.titre)}</div>${sub ? `<div class="sv-s">${esc(sub)}</div>` : ''}</div>
+    </div>`;
+  };
+  const scroll = el.scrollTop;
+  el.innerHTML = `<div class="sv-wrap">
+    ${suiviHeroHtml('Ma progression', suiviCount(suiviProg, items))}
+    <div class="sv-hint">Coche une partie quand tu l'as terminée : ton professeur la valide, et elle passe au vert ici en direct.</div>
+    ${suiviMatieresHtml(suiviProg, items, suiviOpen, row)}
+  </div>`;
+  el.scrollTop = scroll;
+}
+
+async function studentSuiviToggle(id){
+  const items = (suiviData && suiviData.items) || {};
+  const e = (items[id] && items[id].etat) || 'afaire';
+  if(e === 'valide'){ suiviToast('🔒 Déjà validé par ton professeur'); return; }
+  const now = Date.now();
+  const patch = e === 'attente' ? { etat: 'afaire', maj: now } : { etat: 'attente', coche: now, note: '', maj: now };
+  try {
+    await setDoc(doc(db, SUIVI_COL, studentToken), {
+      nom: studentNom, classe: studentClasse, classeKey: suiviClasseKey(studentClasse), updatedAt: now,
+      items: { [id]: patch }
+    }, { merge: true });
+  } catch(err){
+    suiviToast("Impossible d'enregistrer. Vérifie ta connexion.");
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUIVI DES MATIÈRES — CÔTÉ PROFESSEUR
+// ═══════════════════════════════════════════════════════════════
+function suiviAdminStart(){
+  if(suiviAdminReady) return;
+  suiviAdminReady = true;
+  let first = true;
+  const onErr = err => {
+    if(!suiviAdminWarned){
+      suiviAdminWarned = true;
+      suiviToast(err && err.code === 'permission-denied'
+        ? 'Suivi : autorisations Firebase manquantes (chatSuivi, chatSuiviProg).'
+        : 'Suivi : erreur de connexion.');
+    }
+  };
+  suiviAdminUnsubs.push(onSnapshot(collection(db, SUIVI_COL), snap => {
+    const prev = allSuivi, next = {};
+    snap.docs.forEach(d => next[d.id] = d.data());
+    if(!first && !snap.metadata.hasPendingWrites){
+      Object.keys(next).forEach(tok => {
+        const its = next[tok].items || {}, before = (prev[tok] && prev[tok].items) || {};
+        Object.keys(its).forEach(id => {
+          if(its[id].etat === 'attente' && (!before[id] || before[id].etat !== 'attente')) suiviAdminNotify(tok, id);
+        });
+      });
+    }
+    first = false;
+    allSuivi = next;
+    suiviAdminRefresh();
+  }, onErr));
+  suiviAdminUnsubs.push(onSnapshot(collection(db, SUIVI_PROG_COL), snap => {
+    const next = {};
+    snap.docs.forEach(d => next[d.id] = d.data());
+    allSuiviProgs = next;
+    suiviAdminRefresh();
+  }, onErr));
+}
+function suiviAdminStop(){
+  suiviAdminUnsubs.forEach(u => u());
+  suiviAdminUnsubs = [];
+  suiviAdminReady = false;
+  allSuivi = {};
+  allSuiviProgs = {};
+}
+function suiviProgOf(eleve){ return allSuiviProgs[suiviClasseKey(eleve && eleve.classe)] || null; }
+
+// Demandes de validation en attente, regroupées par élève
+function suiviAdminPending(){
+  const groups = [];
+  allEleves.forEach(e => {
+    const d = allSuivi[e.id];
+    const prog = suiviProgOf(e);
+    if(!d || !prog) return;
+    const its = d.items || {};
+    const list = suiviLeaves(prog).filter(l => its[l.id] && its[l.id].etat === 'attente').map(l => ({ leaf: l, coche: its[l.id].coche || 0 }));
+    if(list.length) groups.push({ eleve: e, list: list.sort((a, b) => a.coche - b.coche) });
+  });
+  return groups.sort((a, b) => a.list[0].coche - b.list[0].coche);
+}
+function suiviAdminNotify(tok, id){
+  const e = allEleves.find(x => x.id === tok);
+  if(!e) return;
+  const leaf = suiviLeaves(suiviProgOf(e)).find(l => l.id === id);
+  if(leaf) suiviToast('⏳ ' + (e.nom || 'Un élève') + ' a coché : ' + leaf.mat + ' › ' + leaf.titre);
+}
+function suiviScreenVisible(id){ return !document.getElementById(id).classList.contains('hidden'); }
+function suiviAdminRefresh(){
+  const total = suiviAdminPending().reduce((a, g) => a + g.list.length, 0);
+  const badge = document.getElementById('adminSuiviBadge');
+  if(badge){ badge.textContent = total > 9 ? '9+' : String(total); badge.classList.toggle('hidden', total === 0); }
+  if(suiviScreenVisible('adminSuivi')) renderAdminSuivi();
+  if(suiviScreenVisible('adminSuiviEleve')) renderSuiviEleve();
+}
+
+async function suiviAdminSet(tok, ids, etat, note){
+  const e = allEleves.find(x => x.id === tok) || {};
+  const now = Date.now(), items = {};
+  ids.forEach(id => {
+    items[id] = etat === 'valide' ? { etat, valide: now, note: '', maj: now }
+      : etat === 'revoir' ? { etat, note: note || '', maj: now }
+      : { etat: 'afaire', note: '', maj: now };
+  });
+  try {
+    await setDoc(doc(db, SUIVI_COL, tok), { nom: e.nom || '', classe: e.classe || '', classeKey: suiviClasseKey(e.classe), updatedAt: now, items }, { merge: true });
+  } catch(err){
+    suiviToast('Erreur : ' + (err && err.message ? err.message : err));
+  }
+}
+function suiviAskNote(ctx){
+  return new Promise(resolve => {
+    const m = document.getElementById('suiviNoteModal'), input = document.getElementById('suiviNoteIn');
+    document.getElementById('suiviNoteCtx').textContent = ctx;
+    input.value = '';
+    m.classList.remove('hidden');
+    setTimeout(() => input.focus(), 80);
+    const close = v => { m.classList.add('hidden'); resolve(v); };
+    document.getElementById('suiviNoteCancel').onclick = () => close(null);
+    document.getElementById('suiviNoteOk').onclick = () => close(input.value.trim());
+  });
+}
+// Clic sur ✓ / ↻ / ⟲ (liste « À valider » et fiche élève)
+async function suiviHandleAct(btn){
+  const tok = btn.dataset.tok, id = btn.dataset.id, act = btn.dataset.act;
+  if(act === 'ok') return suiviAdminSet(tok, [id], 'valide');
+  if(act === 'reset') return suiviAdminSet(tok, [id], 'afaire');
+  if(act === 'redo'){
+    const e = allEleves.find(x => x.id === tok);
+    const leaf = suiviLeaves(suiviProgOf(e)).find(l => l.id === id);
+    const note = await suiviAskNote((e ? e.nom + ' — ' : '') + (leaf ? leaf.titre : ''));
+    if(note === null) return;
+    return suiviAdminSet(tok, [id], 'revoir', note);
+  }
+}
+
+function openAdminSuivi(){
+  showScreen('adminSuivi');
+  document.getElementById('suiviBackBtn').onclick = () => showScreen('adminList');
+  document.querySelectorAll('#adminSuivi [data-sv]').forEach(b => {
+    b.onclick = () => { suiviAdminTab = b.dataset.sv; renderAdminSuivi(); };
+  });
+  const body = document.getElementById('suiviAdminBody');
+  body.onclick = e => {
+    const act = e.target.closest('.sv-act');
+    if(act){ suiviHandleAct(act); return; }
+    const all = e.target.closest('.sv-all');
+    if(all){ suiviAdminSet(all.dataset.tok, all.dataset.ids.split(','), 'valide'); return; }
+    const el = e.target.closest('[data-eleve]');
+    if(el){ openSuiviEleve(el.dataset.eleve, 'adminSuivi'); return; }
+    const cl = e.target.closest('[data-classe]');
+    if(cl) openSuiviProgEditor(cl.dataset.classe, cl.dataset.label);
+  };
+  renderAdminSuivi();
+}
+
+function renderAdminSuivi(){
+  const body = document.getElementById('suiviAdminBody');
+  const groups = suiviAdminPending();
+  const nPending = groups.reduce((a, g) => a + g.list.length, 0);
+  document.querySelectorAll('#adminSuivi [data-sv]').forEach(b => b.classList.toggle('active', b.dataset.sv === suiviAdminTab));
+  document.getElementById('svTabValider').innerHTML = 'À valider' + (nPending ? `<span class="tab-dot">${nPending > 9 ? '9+' : nPending}</span>` : '');
+  document.getElementById('suiviAdminSub').textContent = nPending ? nPending + ' partie' + (nPending > 1 ? 's' : '') + ' à valider' : 'Rien en attente';
+  const scroll = body.scrollTop;
+
+  if(suiviAdminTab === 'valider'){
+    if(!groups.length){
+      body.innerHTML = '<div class="sv-empty"><span>🎉</span>Aucune partie à valider pour le moment.<br>Dès qu\'un élève coche une partie, elle apparaît ici en direct.</div>';
+    } else {
+      body.innerHTML = groups.map(g => {
+        const e = g.eleve;
+        return `<div class="sv-group">
+          <div class="sv-group-h">
+            <div class="eleve-av" ${e.avatar ? `style="background-image:url('${e.avatar}')"` : ''}>${e.avatar ? '' : esc(initials(e.nom))}</div>
+            <div class="sv-group-nom">${esc(e.nom || '—')} ${e.classe ? `<span class="eleve-cls">${esc(e.classe)}</span>` : ''}</div>
+            ${g.list.length > 1 ? `<button class="sv-all" data-tok="${esc(e.id)}" data-ids="${g.list.map(x => esc(x.leaf.id)).join(',')}">Tout valider (${g.list.length})</button>` : ''}
+          </div>
+          ${g.list.map(x => `<div class="sv-row st-attente">
+            <div class="sv-txt"><div class="sv-t">${esc(x.leaf.titre)}</div><div class="sv-s">${esc(x.leaf.mat)}${x.leaf.solo ? '' : ' › ' + esc(x.leaf.chap)} · ${esc(suiviAgo(x.coche))}</div></div>
+            <div class="sv-acts">
+              <button class="sv-act ok" data-act="ok" data-tok="${esc(e.id)}" data-id="${esc(x.leaf.id)}" aria-label="Valider ${esc(x.leaf.titre)}">✓</button>
+              <button class="sv-act redo" data-act="redo" data-tok="${esc(e.id)}" data-id="${esc(x.leaf.id)}" aria-label="À revoir ${esc(x.leaf.titre)}">↻</button>
+            </div>
+          </div>`).join('')}
+        </div>`;
+      }).join('');
+    }
+  } else if(suiviAdminTab === 'eleves'){
+    if(!allEleves.length){
+      body.innerHTML = '<div class="sv-empty"><span>👥</span>Aucun élève pour le moment.</div>';
+    } else {
+      body.innerHTML = allEleves.slice().sort((a, b) => (a.nom || '').localeCompare(b.nom || '', 'fr')).map(e => {
+        const prog = suiviProgOf(e);
+        const c = prog ? suiviCount(prog, (allSuivi[e.id] && allSuivi[e.id].items) || {}) : null;
+        return `<div class="eleve-item" data-eleve="${esc(e.id)}">
+          <div class="eleve-av" ${e.avatar ? `style="background-image:url('${e.avatar}')"` : ''}>${e.avatar ? '' : esc(initials(e.nom))}</div>
+          <div class="eleve-mid">
+            <div class="eleve-name">${esc(e.nom || '—')} ${e.classe ? `<span class="eleve-cls">${esc(e.classe)}</span>` : ''}</div>
+            ${c && c.total ? `<div style="margin-top:6px">${suiviBarHtml(c, true)}</div>
+              <div class="sv-mini"><span>${c.valide}/${c.total} validées</span>${c.attente ? `<span>⏳ ${c.attente}</span>` : ''}${c.revoir ? `<span>🔁 ${c.revoir}</span>` : ''}</div>`
+              : '<div class="eleve-snip">Pas de programme pour cette classe</div>'}
+          </div>
+        </div>`;
+      }).join('');
+    }
+  } else {
+    const classes = suiviClassesList();
+    body.innerHTML = `<div class="sv-hint">Un programme par classe : matières, chapitres, puis parties à cocher. Tous les élèves de la classe le voient dans leur espace.</div>` +
+      (classes.length ? classes.map(c => {
+        const p = allSuiviProgs[c.key];
+        const nb = p ? suiviLeaves(p).length : 0;
+        return `<div class="eleve-item" data-classe="${esc(c.key)}" data-label="${esc(c.label)}">
+          <div class="eleve-av">🗂️</div>
+          <div class="eleve-mid">
+            <div class="eleve-name">${esc(c.label)}</div>
+            <div class="eleve-snip">${p ? (p.matieres || []).length + ' matière' + ((p.matieres || []).length > 1 ? 's' : '') + ' · ' + nb + ' élément' + (nb > 1 ? 's' : '') + ' à suivre' : 'Aucun programme — touche pour le créer'}${c.n ? ' · ' + c.n + ' élève' + (c.n > 1 ? 's' : '') : ''}</div>
+          </div>
+        </div>`;
+      }).join('') : '<div class="sv-empty"><span>🗂️</span>Ajoute d\'abord des élèves avec leur classe.</div>');
+  }
+  body.scrollTop = scroll;
+}
+
+function suiviClassesList(){
+  const map = new Map();
+  allEleves.forEach(e => {
+    const k = suiviClasseKey(e.classe);
+    if(!map.has(k)) map.set(k, { key: k, label: (e.classe || '').trim() || 'Sans classe', n: 0 });
+    map.get(k).n++;
+  });
+  Object.keys(allSuiviProgs).forEach(k => {
+    if(!map.has(k)) map.set(k, { key: k, label: allSuiviProgs[k].classe || k, n: 0 });
+  });
+  return [...map.values()].sort((a, b) => a.label.localeCompare(b.label, 'fr'));
+}
+
+// ── Fiche de suivi d'un élève (validation directe partie par partie) ──
+function openSuiviEleve(tok, back){
+  suiviDetailToken = tok;
+  suiviDetailBack = back || 'adminSuivi';
+  showScreen('adminSuiviEleve');
+  document.getElementById('suiviEleveBackBtn').onclick = () => showScreen(suiviDetailBack);
+  document.getElementById('suiviEleveBody').onclick = e => {
+    const act = e.target.closest('.sv-act');
+    if(act){ suiviHandleAct(act); return; }
+    const h = e.target.closest('.sv-mat-h');
+    if(h) suiviToggleMat(h, suiviAdminOpen);
+  };
+  renderSuiviEleve();
+}
+function renderSuiviEleve(){
+  const e = allEleves.find(x => x.id === suiviDetailToken);
+  const body = document.getElementById('suiviEleveBody');
+  if(!e){ body.innerHTML = '<div class="sv-empty"><span>👤</span>Élève introuvable.</div>'; return; }
+  const av = document.getElementById('suiviEleveAv');
+  if(e.avatar){ av.style.backgroundImage = `url('${e.avatar}')`; av.textContent = ''; }
+  else { av.style.backgroundImage = ''; av.textContent = initials(e.nom); }
+  document.getElementById('suiviEleveNom').textContent = e.nom || '—';
+  document.getElementById('suiviEleveSub').textContent = e.classe || 'Sans classe';
+  const prog = suiviProgOf(e);
+  if(!prog || !suiviLeaves(prog).length){
+    body.innerHTML = `<div class="sv-empty"><span>🗂️</span>Aucun programme défini pour ${e.classe ? esc(e.classe) : 'cette classe'}.<br><br><button class="sp-add" id="svGoProg">Créer le programme</button></div>`;
+    document.getElementById('svGoProg').onclick = () => openSuiviProgEditor(suiviClasseKey(e.classe), (e.classe || '').trim() || 'Sans classe');
+    return;
+  }
+  const items = (allSuivi[e.id] && allSuivi[e.id].items) || {};
+  if(!suiviAdminOpen.size){ const f = (prog.matieres || [])[0]; if(f) suiviAdminOpen.add(f.id); }
+  const row = (p, it) => {
+    const st = it.etat || 'afaire';
+    const sub = suiviStatusText(it);
+    return `<div class="sv-row st-${st}">
+      <div class="sv-txt"><div class="sv-t">${esc(p.titre)}</div>${sub ? `<div class="sv-s">${esc(sub)}</div>` : ''}</div>
+      <div class="sv-acts">
+        <button class="sv-act ok ${st === 'valide' ? 'on' : ''}" data-act="ok" data-tok="${esc(e.id)}" data-id="${esc(p.id)}" aria-label="Valider ${esc(p.titre)}">✓</button>
+        <button class="sv-act redo ${st === 'revoir' ? 'on' : ''}" data-act="redo" data-tok="${esc(e.id)}" data-id="${esc(p.id)}" aria-label="À revoir ${esc(p.titre)}">↻</button>
+        <button class="sv-act reset" data-act="reset" data-tok="${esc(e.id)}" data-id="${esc(p.id)}" aria-label="Remettre à faire ${esc(p.titre)}">⟲</button>
+      </div>
+    </div>`;
+  };
+  const scroll = body.scrollTop;
+  body.innerHTML = `<div class="sv-wrap">${suiviHeroHtml('Progression de ' + (e.nom || 'l\'élève'), suiviCount(prog, items))}${suiviMatieresHtml(prog, items, suiviAdminOpen, row)}</div>`;
+  body.scrollTop = scroll;
+}
+
+// ── Éditeur de programme (par classe) ──
+function spDraftFrom(prog){
+  if(!prog || !(prog.matieres || []).length){
+    return { matieres: [['Économie', '📈'], ['Philosophie', '🦉'], ['Français', '📖']].map(([nom, ico]) => ({ id: suiviUid('m'), nom, ico, chapitres: [] })) };
+  }
+  return { matieres: prog.matieres.map(m => ({
+    id: m.id, nom: m.nom, ico: m.ico || '📘',
+    chapitres: (m.chapitres || []).map(c => ({
+      id: c.id, titre: c.titre,
+      orig: (c.parties || []).map(p => ({ id: p.id, titre: p.titre })),
+      raw: (c.parties || []).map(p => p.titre).join('\n')
+    }))
+  })) };
+}
+function openSuiviProgEditor(key, label){
+  spClasseKey = key;
+  spClasseLabel = label;
+  spDraft = spDraftFrom(allSuiviProgs[key]);
+  spDirty = false;
+  document.getElementById('spSub').textContent = label;
+  showScreen('adminSuiviProg');
+  const body = document.getElementById('spBody');
+  document.getElementById('spBackBtn').onclick = () => {
+    if(spDirty && !confirm('Quitter sans enregistrer les modifications ?')) return;
+    openAdminSuivi();
+  };
+  body.oninput = e => {
+    const mEl = e.target.closest('[data-mi]');
+    if(!mEl) return;
+    const m = spDraft.matieres[+mEl.dataset.mi];
+    if(!m) return;
+    spDirty = true;
+    if(e.target.classList.contains('sp-ico')) m.ico = e.target.value;
+    else if(e.target.classList.contains('sp-nom')) m.nom = e.target.value;
+    else {
+      const cEl = e.target.closest('[data-ci]');
+      const c = cEl && m.chapitres[+cEl.dataset.ci];
+      if(!c) return;
+      if(e.target.classList.contains('sp-ctitre')) c.titre = e.target.value;
+      else if(e.target.classList.contains('sp-parts')) c.raw = e.target.value;
+    }
+  };
+  body.onclick = e => {
+    const b = e.target.closest('[data-act]');
+    if(!b) return;
+    const act = b.dataset.act;
+    const mEl = b.closest('[data-mi]');
+    const mi = mEl ? +mEl.dataset.mi : -1;
+    const cEl = b.closest('[data-ci]');
+    const ci = cEl ? +cEl.dataset.ci : -1;
+    if(act === 'add-mat') spDraft.matieres.push({ id: suiviUid('m'), nom: '', ico: '📘', chapitres: [] });
+    else if(act === 'del-mat'){
+      if(!confirm('Supprimer cette matière et ses chapitres du programme ?')) return;
+      spDraft.matieres.splice(mi, 1);
+    }
+    else if(act === 'add-chap') spDraft.matieres[mi].chapitres.push({ id: suiviUid('c'), titre: '', orig: [], raw: '' });
+    else if(act === 'del-chap'){
+      if(!confirm('Supprimer ce chapitre du programme ?')) return;
+      spDraft.matieres[mi].chapitres.splice(ci, 1);
+    }
+    spDirty = true;
+    renderSuiviProgEditor();
+  };
+  document.getElementById('spSaveBtn').onclick = saveSuiviProg;
+  renderSuiviProgEditor();
+}
+function renderSuiviProgEditor(){
+  const body = document.getElementById('spBody');
+  const others = Object.keys(allSuiviProgs).filter(k => k !== spClasseKey && (allSuiviProgs[k].matieres || []).length);
+  const scroll = body.scrollTop;
+  body.innerHTML = (others.length ? `<select class="sp-copy" id="spCopySel" aria-label="Copier le programme d'une autre classe"><option value="">📋 Copier le programme d'une autre classe…</option>${others.map(k => `<option value="${esc(k)}">${esc(allSuiviProgs[k].classe || k)}</option>`).join('')}</select>` : '') +
+    spDraft.matieres.map((m, mi) => `<div class="sp-mat" data-mi="${mi}">
+      <div class="sp-mat-h">
+        <input class="sp-in sp-ico" value="${esc(m.ico)}" maxlength="4" aria-label="Icône de la matière">
+        <input class="sp-in sp-nom" value="${esc(m.nom)}" placeholder="Matière (ex : Philosophie)" aria-label="Nom de la matière">
+        <button class="sp-del" data-act="del-mat" aria-label="Supprimer la matière">🗑</button>
+      </div>
+      ${m.chapitres.map((c, ci) => `<div class="sp-chap" data-ci="${ci}">
+        <div class="sp-chap-h">
+          <input class="sp-in sp-ctitre" value="${esc(c.titre)}" placeholder="Chapitre ou notion" aria-label="Titre du chapitre">
+          <button class="sp-del" data-act="del-chap" aria-label="Supprimer le chapitre">✕</button>
+        </div>
+        <textarea class="sp-in sp-parts" placeholder="Parties à cocher, une par ligne (facultatif : sans parties, c'est le chapitre entier qui se coche)" aria-label="Parties du chapitre">${esc(c.raw)}</textarea>
+      </div>`).join('')}
+      <button class="sp-add" data-act="add-chap">＋ Chapitre</button>
+    </div>`).join('') +
+    `<button class="sp-add full" data-act="add-mat">＋ Ajouter une matière</button><div style="height:14px"></div>`;
+  body.scrollTop = scroll;
+  const sel = document.getElementById('spCopySel');
+  if(sel) sel.onchange = () => {
+    const k = sel.value;
+    if(!k) return;
+    const hadProg = !!allSuiviProgs[spClasseKey];
+    const msg = 'Remplacer le programme en cours de modification par celui de « ' + (allSuiviProgs[k].classe || k) + ' » ?' + (hadProg ? '\nLa progression déjà cochée sur l\'ancien programme ne sera plus affichée.' : '');
+    if(!confirm(msg)){ sel.value = ''; return; }
+    spDraft = spDraftFrom(allSuiviProgs[k]);
+    spDirty = true;
+    renderSuiviProgEditor();
+  };
+}
+// Garde le même identifiant quand un titre est conservé ou simplement renommé → la progression des élèves est préservée.
+function spParseParts(raw, orig){
+  const lines = (raw || '').split('\n').map(s => s.replace(/^[\s\-•*·]+/, '').trim()).filter(Boolean);
+  const norm = s => s.toLowerCase().replace(/\s+/g, ' ');
+  const used = new Set(), res = new Array(lines.length);
+  lines.forEach((t, i) => {
+    const j = orig.findIndex((o, k) => !used.has(k) && norm(o.titre) === norm(t));
+    if(j >= 0){ used.add(j); res[i] = { id: orig[j].id, titre: t }; }
+  });
+  lines.forEach((t, i) => {
+    if(res[i]) return;
+    if(orig[i] && !used.has(i)){ used.add(i); res[i] = { id: orig[i].id, titre: t }; }
+  });
+  lines.forEach((t, i) => { if(!res[i]) res[i] = { id: suiviUid('p'), titre: t }; });
+  return res;
+}
+async function saveSuiviProg(){
+  const matieres = spDraft.matieres
+    .filter(m => (m.nom || '').trim())
+    .map(m => ({
+      id: m.id, nom: m.nom.trim(), ico: (m.ico || '').trim() || '📘',
+      chapitres: m.chapitres.filter(c => (c.titre || '').trim()).map(c => ({ id: c.id, titre: c.titre.trim(), parties: spParseParts(c.raw, c.orig || []) }))
+    }));
+  if(!matieres.length){ suiviToast('Ajoute au moins une matière avec un nom.'); return; }
+  const btn = document.getElementById('spSaveBtn');
+  btn.disabled = true;
+  try {
+    await setDoc(doc(db, SUIVI_PROG_COL, spClasseKey), { classe: spClasseLabel, matieres, updatedAt: Date.now() });
+    spDirty = false;
+    suiviToast('✅ Programme enregistré — les élèves le voient déjà');
+    openAdminSuivi();
+  } catch(err){
+    suiviToast(err && err.code === 'permission-denied' ? 'Autorisations Firebase manquantes pour chatSuiviProg.' : 'Erreur : ' + (err && err.message ? err.message : err));
+  } finally {
+    btn.disabled = false;
   }
 }
 
@@ -2168,11 +2956,14 @@ function startAdminSession(){
   showScreen('adminList');
   document.getElementById('adminLogoutBtn').onclick = () => {
     sessionStorage.removeItem('bhdsChatAdmin');
+    suiviAdminStop();
     showScreen('landing');
   };
   document.getElementById('adminSearch').oninput = renderEleveList;
   document.getElementById('fabNewEleve').onclick = openNewEleveModal;
   document.getElementById('adminSondagesBtn').onclick = openAdminSondages;
+  document.getElementById('adminSuiviBtn').onclick = openAdminSuivi;
+  suiviAdminStart();
   document.getElementById('adminActusBtn').onclick = openAdminActus;
   document.getElementById('adminBacDateBtn').onclick = openBacDatePrompt;
   document.getElementById('adminSettingsBtn').onclick = () => openProfilModal(false);
@@ -2190,6 +2981,7 @@ function startAdminSession(){
   onSnapshot(query(collection(db, ELEVES_COL), orderBy('lastAt','desc')), snap => {
     allEleves = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderEleveList();
+    suiviAdminRefresh();
   });
 }
 
@@ -2660,6 +3452,7 @@ function openAdminChat(token){
   document.getElementById('adminLinkEdtBtn').classList.remove('hidden');
   document.getElementById('adminEdtManualBtn').classList.remove('hidden');
   document.getElementById('adminProgManualBtn').classList.remove('hidden');
+  document.getElementById('adminSuiviEleveBtn').classList.remove('hidden');
   showScreen('adminChat');
 
   const ref = doc(db, ELEVES_COL, token);
@@ -2692,6 +3485,7 @@ function openAdminChat(token){
   document.getElementById('adminLinkEdtBtn').onclick = () => openLinkEdtPrompt(token, data.nom);
   document.getElementById('adminEdtManualBtn').onclick = () => openEdtManualModal(token, data.nom);
   document.getElementById('adminProgManualBtn').onclick = () => openProgManualModal(token, data.nom);
+  document.getElementById('adminSuiviEleveBtn').onclick = () => openSuiviEleve(token, 'adminChat');
 
   wireAdminToolbar('private', token);
 }
@@ -3058,6 +3852,7 @@ function openAdminGroupChat(){
   document.getElementById('adminLinkEdtBtn').classList.add('hidden');
   document.getElementById('adminEdtManualBtn').classList.add('hidden');
   document.getElementById('adminProgManualBtn').classList.add('hidden');
+  document.getElementById('adminSuiviEleveBtn').classList.add('hidden');
   showScreen('adminChat');
 
   if(adminUnsub) adminUnsub();
